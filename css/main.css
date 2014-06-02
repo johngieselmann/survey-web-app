@@ -72,6 +72,13 @@ button {
   color: #fefefe;
   background: #0eb1eb;
 }
+.btn-submit {
+  display: block;
+  margin: 4em auto;
+  font-size: 2em;
+  color: #fefefe;
+  background: #fe403b;
+}
 /* ==========================================================================
    Header
    ========================================================================== */
@@ -89,10 +96,12 @@ header h1 {
    ========================================================================== */
 section {
   position: absolute;
-  top: 5em;
+  top: 0;
   left: -100%;
   bottom: 5em;
   width: 100%;
+  padding: 2em 0 0 0;
+  text-align: center;
   background: #fefefe;
   -webkit-transition: left 300ms ease-in;
   -moz-transition: left 300ms ease-in;
@@ -105,6 +114,14 @@ section {
   -o-transition: right 300ms ease-in;
   transition: right 300ms ease-in;
   -webkit-backface-visibility: hidden;
+}
+section h1 {
+  width: 10em;
+  margin: 0 auto;
+  padding: .5em;
+  text-align: center;
+  font-size: 1.8em;
+  color: #1b2026;
 }
 section.left-on,
 section.right-on {
@@ -134,34 +151,12 @@ section.right-off {
   transition: left 300ms ease-in;
   -webkit-backface-visibility: hidden;
 }
-/* Questions
+/* Answers
    ========================================================================== */
-section.question h1 {
-  width: 10em;
-  margin: 0 auto;
-  padding: .5em;
-  text-align: center;
-  font-size: 1.8em;
-  color: #fefefe;
-  background: #1b2026;
-  -webkit-border-top-left-radius: 5px;
-  -webkit-border-top-right-radius: 5px;
-  -webkit-border-bottom-right-radius: 5px;
-  -webkit-border-bottom-left-radius: 5px;
-  -moz-border-radius-topleft: 5px;
-  -moz-border-radius-topright: 5px;
-  -moz-border-radius-bottomright: 5px;
-  -moz-border-radius-bottomleft: 5px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
-}
-section.question button {
+button.answer {
   width: 10em;
   height: 10em;
   margin: 1em;
-  padding: 2em;
   text-align: center;
   font-size: 1.4em;
   color: #fefefe;
@@ -178,6 +173,15 @@ section.question button {
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;
   border-bottom-left-radius: 50%;
+  -webkit-transition: all 300ms ease-in;
+  -moz-transition: all 300ms ease-in;
+  -ms-transition: all 300ms ease-in;
+  -o-transition: all 300ms ease-in;
+  transition: all 300ms ease-in;
+  -webkit-backface-visibility: hidden;
+}
+button.answer.not-chosen {
+  background: #cabdc6;
 }
 /* ==========================================================================
    Footer
@@ -188,7 +192,33 @@ footer {
   left: 0;
   width: 100%;
   height: 5em;
-  background: #f9f9f9;
+}
+/* Buttons
+   ========================================================================== */
+.progress-btn {
+  margin: .5em;
+  font-size: 1.5em;
+  color: #fefefe;
+  cursor: default;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  -webkit-transition: all 500ms ease-in;
+  -moz-transition: all 500ms ease-in;
+  -ms-transition: all 500ms ease-in;
+  -o-transition: all 500ms ease-in;
+  transition: all 500ms ease-in;
+  -webkit-backface-visibility: hidden;
+}
+.progress-btn.active {
+  cursor: pointer;
+  background: #fe403b;
+  opacity: 1;
+  filter: alpha(opacity=0);
+}
+.progress-btn.inactive {
+  background: #eeeeee;
+  opacity: 1;
+  filter: alpha(opacity=0);
 }
 /* ==========================================================================
    Media Queries for Responsive Design.

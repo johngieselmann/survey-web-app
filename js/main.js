@@ -21,8 +21,9 @@
          * The app buttons.
          */
         btns : {
+            back   : null,
             begin  : null,
-            submit : null,
+            submit : null
         },
 
         /**
@@ -50,6 +51,12 @@
          * @var obj results
          */
         results : {},
+
+        /**
+         * The current question ID.
+         * @var int currentQid
+         */
+        currentQid : null,
 
         /**
          * Initialize the application.
@@ -96,6 +103,8 @@
          */
         bindEvents : function() {
             app.btns.begin.on("click", app.begin);
+            app.btns.back.on("click", app.previousQuestion);
+            app.btns.submit.on("click", app.submit);
         },
 
         /**
@@ -120,6 +129,9 @@
                 // create all the answers for this question
                 for (var j in qData.a) {
                     var $a = app.makeAnswer(qData, qData.a[j]);
+
+                    // add the appropriate class
+                    $a.addClass("answer-" + qData.a.length);
                     dataEl.a.push($a);
                     dataEl.q.append($a);
                 }
@@ -177,6 +189,11 @@
             $el.on("click", app.saveAnswer);
             $el.on("click", app.nextQuestion);
 
+            // allow hover states for non-touch devices
+            if (!Modernizr.touch) {
+                $el.on("mouseover mouseout", app.toggleNotChosen);
+            }
+
             return $el;
         },
 
@@ -192,22 +209,43 @@
             // remove the begin button / section from the screen
             app.trans.sectionMove($(".js-begin"));
 
+            // show the proper buttons
+            app.btns.back.addClass("inactive");
+            if (app.dataElements.length === 1) {
+                app.btns.submit.addClass("active");
+            } else {
+                app.btns.submit.addClass("inactive");
+            }
+
             // add the first question
-            app.addQuestion(1);
+            app.loadSection(1);
+
         },
 
         /**
          * Save an answer to the results.
+         *
+         * @author JohnG <john.gieselmann@upsync.com>
+         *
+         * @return void
          */
         saveAnswer : function() {
-            var $el = $(this);
+            var $el = $(this)
+                .removeClass("not-chosen")
+                .addClass("chosen");
+
+            // update the chosen and not chosen status
+            var $notChosen = $el.siblings()
+                .addClass("not-chosen");
+
+            // add the answer to the results object
             app.results[$el.attr("data-qid")] = $el.attr("data-aid");
 
             console.log("saved: ", app.results);
         },
 
         /**
-         * Add a question to the app.
+         * Load a section into the app.
          *
          * @author JohnG <john.gieselmann@upsync.com>
          *
@@ -215,10 +253,27 @@
          *
          * @return void
          */
-        addQuestion : function(qid) {
-            console.log("add question", qid);
+        loadSection : function(qid) {
+            console.log("load section", qid);
 
-            var $q = $(".js-qestion[data-qid='" + qid + "']");
+            // toggle the submit button appropriately
+            if (qid === app.dataElements.length) {
+                app.toggleEl(app.btns.submit, "active");
+            } else {
+                app.toggleEl(app.btns.submit, "inactive");
+            }
+
+            // toggle the back button appropriately
+            if (qid === 1) {
+                app.toggleEl(app.btns.back, "inactive");
+            } else {
+                app.toggleEl(app.btns.back, "active");
+            }
+
+            // update the current question id
+            app.currentQid = qid;
+
+            var $q = $(".js-question[data-qid='" + qid + "']");
             $q.addClass("active");
 
             app.trans.sectionMove($q, "right", true);
@@ -242,34 +297,152 @@
         },
 
         /**
-         * Move to the next question.
+         * Move to the next question based on the current stored in the app.
          *
          * @author JohnG <john.gieselmann@upsync.com>
          *
-         * @param obj e The jQuery event object.
-         * @param int qid The forced question to load next.
-         *
          * @return void
          */
-        nextQuestion : function(e, qid) {
+        nextQuestion : function() {
 
-            // if we are not passing in the question id, then this is being
-            // called via a jQuery event binding
-            if (typeof qid === "undefined") {
-                qid = $(this).attr("data-qid");
-            }
+            // get the next question id
+            var newQid = app.currentQid + 1;
 
             // if we are at the end of the question, do not move forward
-            if (qid === (dataElements.length - 1)) {
+            if (newQid > app.dataElements.length) {
                 console.log("at the end");
                 return false;
             } else {
-                var $el = $(".js-question[data-qid='" + qid + "']");
-                app.removeQuestion(qid);
+                var $el = $(".js-question[data-qid='" + newQid + "']");
+                app.removeQuestion(app.currentQid);
+                app.loadSection(newQid);
             }
+        },
 
+        /**
+         * Move to the previous question based on the current stored in the app.
+         *
+         * @author JohnG <john.gieselmann@upsync.com>
+         *
+         * @return void
+         */
+        previousQuestion : function() {
+            // get the previous question id
+            var newQid = app.currentQid - 1;
 
+            // if we are at the beginning of the survey, do not go back
+            if (newQid <= 0) {
+                console.log("at the beginning");
+                return false;
+            } else {
+                var $el = $(".js-question[data-qid='" + newQid + "']");
+                app.removeQuestion(app.currentQid);
+                app.loadSection(newQid);
+            }
+        },
+
+        /**
+         * Toggle a button from inactive to active and vice versa.
+         *
+         * @author JohnG <john.gieselmann@upsync.com>
+         *
+         * @param obj $el The jQuery element to toggle.
+         * @param str force Which direction to force the element.
+         *   [active | inactive]
+         */
+        toggleEl : function($el, force) {
+            force = force || false;
+
+            // do not force, nature finds a way (true toggle)
+            if (force === false) {
+
+                if ($el.is("inactive")) {
+                    $el.removeClass("inactive");
+                    $el.addClass("active");
+                } else {
+                    $el.removeClass("active");
+                    $el.addClass("inactive");
+                }
+            } else {
+
+                // we are trying to force the button a certain way
+                switch (force) {
+                    case "active":
+                        $el.removeClass("inactive");
+                        $el.addClass("active");
+                        break;
+
+                    case "inactive":
+                        $el.removeClass("active");
+                        $el.addClass("inactive");
+                        break;
+                }
+            }
+        },
+
+        /**
+         * Toggle the other answers not chosen.
+         *
+         * @author JohnG <john.gieselmann@upsync.com>
+         *
+         * @param obj e The jQuery event.
+         *
+         * @return void
+         */
+        toggleNotChosen : function(e) {
+            var $el = $(this);
+            var qid = $el.attr("data-qid");
+            var $answers = $(".js-answer[data-qid='" + qid + "']");
+
+            // this was triggered by a hover event
+            if (typeof e !== "undefined") {
+
+                switch (e.type) {
+                    case "mouseover":
+                        $el.removeClass("not-chosen");
+                        $answers.not($el)
+                            .addClass("not-chosen");
+                        break;
+
+                    case "mouseout":
+                    case "mouseleave":
+
+                        // if one is selected, assign classes
+                        var $chosen = null;
+                        $answers.each(function() {
+                            var $answer = $(this);
+                            if ($answer.is(".chosen")) {
+                                $chosen = $answer;
+                                return false;
+                            }
+                        });
+
+                        if ($chosen) {
+                            $answers.not($chosen)
+                                .addClass("not-chosen");
+                        } else {
+                            $answers.removeClass("not-chosen");
+                        }
+                        break;
+                }
+
+            }
+        },
+
+        /**
+         * Submit the data.
+         *
+         * @author JohnG <john.gieselmann@upsync.com>
+         *
+         * @return void
+         */
+        submit : function() {
+            if (app.btns.submit.is(".inactive")) {
+                console.log("do not submit, not at the end");
+                return false;
+            }
         }
+
     };
 
     /**
