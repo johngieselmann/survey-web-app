@@ -50,6 +50,10 @@ html {
     font-weight: 100;
 }
 
+body {
+    overflow: hidden;
+}
+
 a,
 a:hover,
 a:active,
@@ -57,13 +61,123 @@ a:visited {
     text-decoration: none;
 }
 
+button {
+    padding: .5em .7em;
+
+    border: none;
+    outline: none;
+
+    .borderRadius();
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.btn-begin {
+    display: block;
+    margin: 4em auto;
+
+    font-size: 2em;
+    color: @white;
+    .background(@primary);
+}
+
 /* ==========================================================================
    Header
    ========================================================================== */
+
 header {
+    height: 5em;
+
+    line-height: 5em;
+    color: @tertiary;
+
     h1 {
         text-align: center;
+        font-size: 3em;
     }
+}
+
+/* ==========================================================================
+   Questions and Answers
+   ========================================================================== */
+
+@sectionTransDur: 300ms;
+
+section {
+    position: absolute;
+    top: 5em;
+    left: -100%;
+    bottom: 5em;
+    width: 100%;
+
+    background: @white;
+
+    .transition(left, @sectionTransDur);
+    .transition(right, @sectionTransDur);
+}
+
+section.left-on,
+section.right-on {
+    left: 0;
+    .transition(left, @sectionTransDur);
+}
+
+section.left-off {
+    left: -100%;
+    .transition(left, @sectionTransDur);
+}
+
+section.right-off {
+    left: 100%;
+    .transition(left, @sectionTransDur);
+}
+
+/* Questions
+   ========================================================================== */
+
+section.question {
+    h1 {
+        width: 10em;
+        margin: 0 auto;
+        padding: .5em;
+
+        text-align: center;
+        font-size: 1.8em;
+        color: @white;
+        .background(@black);
+
+//        .borderRadius(50%, 50%, 50%, 50%);
+        .borderRadius();
+    }
+
+    button {
+        width: 10em;
+        height: 10em;
+        margin: 1em;
+        padding: 2em;
+
+        text-align: center;
+        font-size: 1.4em;
+        color: @white;
+
+        .background(@primary);
+        .borderRadius(50%, 50%, 50%, 50%);
+    }
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 5em;
+
+    background: @greyLight;
 }
 
 /* ==========================================================================
