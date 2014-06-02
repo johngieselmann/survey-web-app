@@ -53,10 +53,10 @@
         results : {},
 
         /**
-         * The current question ID.
-         * @var int currentQid
+         * The current section ID.
+         * @var int currentSection
          */
-        currentQid : null,
+        currentSection : null,
 
         /**
          * Initialize the application.
@@ -159,7 +159,8 @@
             // create the containing section
             var $el = $("<section></section>")
                 .addClass("js-question question right-off")
-                .attr("data-qid", qData.id);
+                .attr("data-qid", qData.id)
+                .attr("data-sid", qData.id);
 
             $el.append($q);
 
@@ -211,11 +212,6 @@
 
             // show the proper buttons
             app.btns.back.addClass("inactive");
-            if (app.dataElements.length === 1) {
-                app.btns.submit.addClass("active");
-            } else {
-                app.btns.submit.addClass("inactive");
-            }
 
             // add the first question
             app.loadSection(1);
@@ -249,51 +245,54 @@
          *
          * @author JohnG <john.gieselmann@upsync.com>
          *
-         * @param int qid The question id being added to the app.
+         * @param int sid The question id being added to the app.
          *
          * @return void
          */
-        loadSection : function(qid) {
-            console.log("load section", qid);
+        loadSection : function(sid) {
 
-            // toggle the submit button appropriately
-            if (qid === app.dataElements.length) {
-                app.toggleEl(app.btns.submit, "active");
+            if (typeof sid === "string") {
+                var $section = $("section[data-section='" + sid + "']");
+                app.trans.sectionMove($section, "right", true);
+
+                // fake the new currentSection
+                app.currentSection += 1;
             } else {
-                app.toggleEl(app.btns.submit, "inactive");
+
+                // toggle the back button appropriately
+                if (sid === 1) {
+                    app.toggleEl(app.btns.back, "inactive");
+                } else {
+                    app.toggleEl(app.btns.back, "active");
+                }
+
+                // update the current question id
+                app.currentSection = sid;
+
+                var $q = $(".js-question[data-sid='" + sid + "']");
+                $q.addClass("active");
+
+                app.trans.sectionMove($q, "right", true);
             }
-
-            // toggle the back button appropriately
-            if (qid === 1) {
-                app.toggleEl(app.btns.back, "inactive");
-            } else {
-                app.toggleEl(app.btns.back, "active");
-            }
-
-            // update the current question id
-            app.currentQid = qid;
-
-            var $q = $(".js-question[data-qid='" + qid + "']");
-            $q.addClass("active");
-
-            app.trans.sectionMove($q, "right", true);
         },
 
         /**
-         * Remove a question from the app.
+         * Remove a section from the app screen.
          *
          * @author JohnG <john.gieselmann@upsync.com>
          *
-         * @param int qid The question id being removed from the app.
+         * @param int sid The question id being removed from the app.
          *
          * @return void
          */
-        removeQuestion : function(qid) {
+        unloadSection : function(sid, dir) {
+            // default is to remove to the left
+            dir = dir || "left";
 
-            var $q = $(".js-question[data-qid='" + qid + "']");
+            var $q = $(".js-question[data-sid='" + sid + "']");
             $q.removeClass("active");
 
-            app.trans.sectionMove($q, "left", false);
+            app.trans.sectionMove($q, dir, false);
         },
 
         /**
@@ -306,16 +305,16 @@
         nextQuestion : function() {
 
             // get the next question id
-            var newQid = app.currentQid + 1;
+            var newSid = app.currentSection + 1;
 
-            // if we are at the end of the question, do not move forward
-            if (newQid > app.dataElements.length) {
-                console.log("at the end");
-                return false;
+            // if we are at the end of the question, allow submission
+            if (newSid > app.dataElements.length) {
+                app.unloadSection(app.currentSection, "left");
+                app.loadSection("submit");
             } else {
-                var $el = $(".js-question[data-qid='" + newQid + "']");
-                app.removeQuestion(app.currentQid);
-                app.loadSection(newQid);
+                var $el = $(".js-question[data-sid='" + newSid + "']");
+                app.unloadSection(app.currentSection, "left");
+                app.loadSection(newSid);
             }
         },
 
@@ -328,16 +327,15 @@
          */
         previousQuestion : function() {
             // get the previous question id
-            var newQid = app.currentQid - 1;
+            var newSid = app.currentSection - 1;
 
             // if we are at the beginning of the survey, do not go back
-            if (newQid <= 0) {
-                console.log("at the beginning");
+            if (newSid <= 0) {
                 return false;
             } else {
-                var $el = $(".js-question[data-qid='" + newQid + "']");
-                app.removeQuestion(app.currentQid);
-                app.loadSection(newQid);
+                var $el = $(".js-question[data-sid='" + newSid + "']");
+                app.unloadSection(app.currentSection, "right");
+                app.loadSection(newSid);
             }
         },
 
@@ -437,10 +435,7 @@
          * @return void
          */
         submit : function() {
-            if (app.btns.submit.is(".inactive")) {
-                console.log("do not submit, not at the end");
-                return false;
-            }
+            return false;
         }
 
     };

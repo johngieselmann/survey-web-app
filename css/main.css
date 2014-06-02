@@ -65,19 +65,13 @@ button {
 /* ==========================================================================
    Buttons
    ========================================================================== */
-.btn-begin {
-  display: block;
-  margin: 4em auto;
-  font-size: 2em;
-  color: #fefefe;
-  background: #0eb1eb;
-}
+.btn-begin,
 .btn-submit {
   display: block;
   margin: 4em auto;
   font-size: 2em;
   color: #fefefe;
-  background: #fe403b;
+  background: #0eb1eb;
 }
 /* ==========================================================================
    Header
