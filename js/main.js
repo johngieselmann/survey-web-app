@@ -53,10 +53,20 @@
         results : {},
 
         /**
-         * The current section ID.
-         * @var int currentSection
+         * The current, submit, and end section IDs.
+         * @var int currentSid
+         * @var int submitSid
+         * @var int endSid
          */
-        currentSection : null,
+        currentSid : null,
+        submitSid  : null,
+        endSid     : null,
+
+        /**
+         * Keep track whether or not the app has been submitted.
+         * @var bool submitted
+         */
+        submitted : false,
 
         /**
          * Initialize the application.
@@ -103,7 +113,7 @@
          */
         bindEvents : function() {
             app.btns.begin.on("click", app.begin);
-            app.btns.back.on("click", app.previousQuestion);
+            app.btns.back.on("click", app.previousSection);
             app.btns.submit.on("click", app.submit);
         },
 
@@ -139,6 +149,15 @@
                 app.dataElements.push(dataEl);
                 $main.append(dataEl.q);
             }
+
+            // update the submit and end sid
+            var $submit = $("section[data-sid='submit']");
+            app.submitSid = app.dataElements.length + 1;
+            $submit.attr("data-sid", app.submitSid);
+
+            var $end = $("section[data-sid='end']");
+            app.endSid = app.dataElements.length + 2;
+            $end.attr("data-sid", app.endSid);
         },
 
         /**
@@ -188,7 +207,7 @@
 
             // bind the events to the button
             $el.on("click", app.saveAnswer);
-            $el.on("click", app.nextQuestion);
+            $el.on("click", app.nextSection);
 
             // allow hover states for non-touch devices
             if (!Modernizr.touch) {
@@ -237,7 +256,6 @@
             // add the answer to the results object
             app.results[$el.attr("data-qid")] = $el.attr("data-aid");
 
-            console.log("saved: ", app.results);
         },
 
         /**
@@ -251,29 +269,20 @@
          */
         loadSection : function(sid) {
 
-            if (typeof sid === "string") {
-                var $section = $("section[data-section='" + sid + "']");
-                app.trans.sectionMove($section, "right", true);
-
-                // fake the new currentSection
-                app.currentSection += 1;
+            // toggle the back button appropriately
+            if (sid === 1) {
+                app.toggleEl(app.btns.back, "inactive");
             } else {
-
-                // toggle the back button appropriately
-                if (sid === 1) {
-                    app.toggleEl(app.btns.back, "inactive");
-                } else {
-                    app.toggleEl(app.btns.back, "active");
-                }
-
-                // update the current question id
-                app.currentSection = sid;
-
-                var $q = $(".js-question[data-sid='" + sid + "']");
-                $q.addClass("active");
-
-                app.trans.sectionMove($q, "right", true);
+                app.toggleEl(app.btns.back, "active");
             }
+
+            // update the current question id
+            app.currentSid = sid;
+
+            var $q = $("[data-sid='" + sid + "']");
+            $q.addClass("active");
+
+            app.trans.sectionMove($q, "right", true);
         },
 
         /**
@@ -289,52 +298,47 @@
             // default is to remove to the left
             dir = dir || "left";
 
-            var $q = $(".js-question[data-sid='" + sid + "']");
+            var $q = $("[data-sid='" + sid + "']");
             $q.removeClass("active");
 
             app.trans.sectionMove($q, dir, false);
         },
 
         /**
-         * Move to the next question based on the current stored in the app.
+         * Move to the next section based on the current stored in the app.
          *
          * @author JohnG <john.gieselmann@upsync.com>
          *
          * @return void
          */
-        nextQuestion : function() {
+        nextSection : function() {
 
             // get the next question id
-            var newSid = app.currentSection + 1;
+            var newSid = app.currentSid + 1;
 
             // if we are at the end of the question, allow submission
-            if (newSid > app.dataElements.length) {
-                app.unloadSection(app.currentSection, "left");
-                app.loadSection("submit");
-            } else {
-                var $el = $(".js-question[data-sid='" + newSid + "']");
-                app.unloadSection(app.currentSection, "left");
-                app.loadSection(newSid);
-            }
+            var $el = $(".js-question[data-sid='" + newSid + "']");
+            app.unloadSection(app.currentSid, "left");
+            app.loadSection(newSid);
         },
 
         /**
-         * Move to the previous question based on the current stored in the app.
+         * Move to the previous section based on the current stored in the app.
          *
          * @author JohnG <john.gieselmann@upsync.com>
          *
          * @return void
          */
-        previousQuestion : function() {
+        previousSection : function() {
             // get the previous question id
-            var newSid = app.currentSection - 1;
+            var newSid = app.currentSid - 1;
 
             // if we are at the beginning of the survey, do not go back
             if (newSid <= 0) {
                 return false;
             } else {
                 var $el = $(".js-question[data-sid='" + newSid + "']");
-                app.unloadSection(app.currentSection, "right");
+                app.unloadSection(app.currentSid, "right");
                 app.loadSection(newSid);
             }
         },
@@ -435,9 +439,27 @@
          * @return void
          */
         submit : function() {
-            return false;
-        }
+            // haxorz be trying to submit twice, not in my house
+            if (app.submitted === true) {
+                return false;
+            }
+            app.submitted = true;
+            console.log("submit: ", app.results);
 
+            // if online, submit
+            if (navigator.onLine) {
+            } else {
+                // otherwise, store locally
+                localStorage.setItem("sample_questionaire_results", JSON.stringify(app.results));
+            }
+
+            // load the end section and remove all others
+            app.loadSection(app.endSid);
+            app.btns.back.remove();
+            setTimeout(function() {
+                $("section").not("[data-sid='" + app.endSid + "']").remove();
+            }, 1000);
+        }
     };
 
     /**
