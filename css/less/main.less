@@ -1,0 +1,130 @@
+// LESS Main Stylsheet
+@import "mixins";
+@import "colors";
+
+// Set up some simple font defaults
+@sansSerif: Helvetica, Arial, Verdana, sans-serif;
+@serif: Georgia, Palatino, serif;
+
+/* ==========================================================================
+   Section comment block
+   ========================================================================== */
+
+/* Sub-section comment block
+   ========================================================================== */
+
+/**
+ * Short description using Doxygen-style comment format
+ *
+ * The first sentence of the long description starts here and continues on this
+ * line for a while finally concluding here at the end of this paragraph.
+ *
+ * The long description is ideal for more detailed explanations and
+ * documentation. It can include example HTML, URLs, or any other information
+ * that is deemed necessary or useful.
+ *
+ * @tag This is a tag named 'tag'
+ *
+ * TODO: This is a todo statement that describes an atomic task to be completed
+ *   at a later date. It wraps after 80 characters and following lines are
+ *   indented by 2 spaces.
+ */
+
+/* Basic comment */
+
+.selector {
+    /* Positioning */
+
+    /* Display & Box Model */
+
+    /* Other */
+}
+
+/* ==========================================================================
+   General site styles
+   ========================================================================== */
+
+html {
+    font-family: @sansSerif;
+    font-size: 10px;
+    font-weight: 100;
+}
+
+a,
+a:hover,
+a:active,
+a:visited {
+    text-decoration: none;
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+header {
+    h1 {
+        text-align: center;
+    }
+}
+
+/* ==========================================================================
+   Media Queries for Responsive Design.
+   ========================================================================== */
+
+/**
+ * iPhone <5 portrait width
+ */
+@media only screen and (min-width: 320px) {
+
+}
+
+/**
+ * iPhone <5 landscape width
+ */
+@media only screen and (min-width: 480px) {
+
+}
+
+/**
+ * iPhone 5 landscape width
+ */
+@media only screen and (min-width: 568px) {
+
+}
+
+/**
+ * Medium mobile for good measure
+ */
+@media only screen and (min-width: 600px) {
+
+}
+
+/**
+ * iPad portrait width
+ */
+@media only screen and (min-width: 768px) {
+
+}
+
+/**
+ * Good desktop width
+ */
+@media only screen and (min-width: 960px) {
+
+}
+
+/**
+ * iPad landscape width
+ */
+@media only screen and (min-width: 1024px) {
+
+}
+
+/**
+ * Adjustments for high-res devices
+ */
+@media print,
+       (-o-min-device-pixel-ratio: 5/4),
+       (-webkit-min-device-pixel-ratio: 1.25),
+       (min-resolution: 120dpi) {
+
+}

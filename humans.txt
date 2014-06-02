@@ -1,0 +1,25 @@
+# humanstxt.org/
+# The humans responsible for this beast.
+
+/* TEAM */
+
+Developer: John Gieselmann
+Site:      johngieselmann.com
+Email:     john.gieselmann@gmail.com
+Location:  Denver, CO
+
+
+        [...]
+
+/* THANKS */
+
+HTML5 Boilerplate -- http://html5boilerplate.com
+
+        [...]
+
+/* SITE */
+
+Last Update: <date>
+Standards:   HTML5, CSS3
+Components:  jQuery, Modernizr, LESS
+Software:    <software>

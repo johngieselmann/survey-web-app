@@ -1,0 +1,99 @@
+// LESS CSS MIXINS
+
+// ANIMATIONS, TRANSFORMS, AND TRANSITIONS
+.transition(@prop: all, @time: 500ms, @backface: hidden) {
+    -webkit-transition: @prop @time ease-in;
+    -moz-transition: @prop @time ease-in;
+    -ms-transition: @prop @time ease-in;
+    -o-transition: @prop @time ease-in;
+    transition: @prop @time ease-in;
+
+    -webkit-backface-visibility: @backface;
+}
+
+.twoStageAnim(@prop, @1, @2) {
+    0% {
+        @prop: @1;
+    }
+    100% {
+        @prop: @2;
+    }
+}
+
+.animation(@name, @dur: 500ms, @iter: infinite) {
+    animation-name: @name;
+    animation-duration: @dur;
+    animation-iteration-count: @iter;
+    animation-timing-function: linear;
+    animation-direction: alternate;
+    animation-play-state: running;
+
+    -webkit-animation-name: @name;
+    -webkit-animation-duration: @dur;
+    -webkit-animation-iteration-count: @iter;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-direction: alternate;
+    -webkit-animation-play-state: running;
+}
+
+.scale(@width: 2, @height: 2) {
+    -webkit-transform: scale(@width, @height);
+    -ms-transform: scale(@width, @height);
+    transform: scale(@width, @height);
+}
+
+.opacity(@opacity: 70) {
+    opacity: (@opacity / 100);
+    filter: alpha(opacity=@opacity);
+}
+
+.background(@color, @opacity: 1) {
+    background: @color;
+    background: rgba(red(@color), green(@color), blue(@color), @opacity);
+}
+
+.innerGlow(@px: 10px, @alpha: .5) {
+    -webkit-box-shadow: inset 0 0 @px rgba(0, 0, 0, @alpha);
+    -moz-box-shadow: inset 0 0 @px rgba(0, 0, 0, @alpha);
+    box-shadow: inset 0 0 @px rgba(0, 0, 0, @alpha);
+}
+
+.boxShadow(@horizontal: 0, @vertical: 5px, @blur: 5px, @alpha: .5) {
+    -webkit-box-shadow: @horizontal @vertical @blur rgba(0, 0, 0, @alpha);
+    -moz-box-shadow: @horizontal @vertical @blur rgba(0, 0, 0, @alpha);
+    box-shadow: @horizontal @vertical @blur rgba(0, 0, 0, @alpha);
+}
+
+.multiBoxShadow(@first, @second) {
+    -webkit-box-shadow: @first, @second;
+    -moz-box-shadow: @first, @second;
+    box-shadow: @first, @second;
+}
+
+.borderRadius(@tl: 5px, @tr: 5px, @br: 5px, @bl: 5px) {
+    -webkit-border-top-left-radius: @tl;
+    -webkit-border-top-right-radius: @tr;
+    -webkit-border-bottom-right-radius: @br;
+    -webkit-border-bottom-left-radius: @bl;
+
+    -moz-border-radius-topleft: @tl;
+    -moz-border-radius-topright: @tr;
+    -moz-border-radius-bottomright: @br;
+    -moz-border-radius-bottomleft: @bl;
+
+    border-top-left-radius: @tl;
+    border-top-right-radius: @tr;
+    border-bottom-right-radius: @br;
+    border-bottom-left-radius: @bl;
+}
+
+.gradient(@top, @bottom) {
+    background: @top;
+    background: -moz-linear-gradient(top,  @top 0%, @bottom 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,@top), color-stop(100%,@bottom));
+    background: -webkit-linear-gradient(top,  @top 0%,@bottom 100%);
+    background: -o-linear-gradient(top,  @top 0%,@bottom 100%);
+    background: -ms-linear-gradient(top,  @top 0%,@bottom 100%);
+    background: linear-gradient(to bottom,  @top 0%,@bottom 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@top', endColorstr='@bottom',GradientType=0 );
+}
