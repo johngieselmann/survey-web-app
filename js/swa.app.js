@@ -423,7 +423,6 @@
          * @return void
          */
         loadSection : function(section) {
-            console.log(section);
 
             // grab the section being loaded
             var $section = section instanceof jQuery
@@ -656,7 +655,7 @@
             }
 
             // load the end section and remove all others
-            app.loadSection(app.section.$end);
+            app.nextSection();
             app.btn.$back.remove();
             setTimeout(function() {
                 $("section").not(app.section.$end).remove();
