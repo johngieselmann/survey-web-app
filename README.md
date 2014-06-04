@@ -18,7 +18,7 @@ Clone this repository to your site / server.
 git clone https://git@github.com/johngieselmann/survey-web-app
 ```
 
-Add your questions and answers to the `js/qa.data.js` file following the
+Add your questions and answers to the `js/swa.data.js` file following the
 guidlines outlined below and in the file.
 ```
 var appData = [
@@ -53,7 +53,7 @@ var appData = [
 ```
 
 Initialize the app anywhere after the two JavaScript files have been added
-to the page `js/qa.app.js` and `js/qa.data.js`
+to the page `js/swa.app.js` and `js/swa.data.js`
 ```
 <script type="text/javascript">
     // the configuration for the 
