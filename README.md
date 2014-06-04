@@ -1,7 +1,7 @@
 # Survey Web App
 
 A survey web app / page that can be added to any site for easy capturing of
-use data. Currently, it only supports multiple-choice answers. Deal with it.
+user input. Currently, it only supports multiple-choice answers. Deal with it.
 Just consider it anonymous... you'll get more honest answers that way.
 
 On submit, the questions and selected answers are posted as JSON to the URL
@@ -19,7 +19,7 @@ git clone https://git@github.com/johngieselmann/survey-web-app
 ```
 
 Add your questions and answers to the `js/qa.data.js` file following the
-guidlines outlined in the file and below.
+guidlines outlined below and in the file.
 ```
 var appData = [
     // question 1
@@ -27,14 +27,25 @@ var appData = [
         id      : <str> // used for question identification on submission
         display : <str> // actual text displayed for the question
 
+        // OPTIONAL: attributes to be added to the question's HTML
+        // section tag. DO NOT USE "sid" as a custom attribute...
+        // things will break and you will not be happy
+        attr    : {
+            id       : <str> // overrides the ID attribute
+            rel      : <str> // overrides the rel attribute
+            class    : <str> // appended to current classes
+            <custom> : <str> // added as "data-<custom>" attribute
+        }
+
         // the array of answer objects to go with the question
         answers : [
             // answer 1
             {
                 id      : <str> // used for answer identification on submission
                 value   : <str> // the value submitted for this answer
-                display : [str] // OPTIONAL: text displayed for the answer
+                display : <str> // OPTIONAL: text displayed for the answer
                                 // if none is supplied it defaults to value
+                attr    : {}    // same as question attr, see above
             }
         ]
     }

@@ -10,14 +10,25 @@
      *         id      : <str> // used for question identification on submission
      *         display : <str> // actual text displayed for the question
      *
+     *         // OPTIONAL: attributes to be added to the question's HTML
+     *         // section tag. DO NOT USE "sid" as a custom attribute...
+     *         // things will break and you will not be happy
+     *         attr    : {
+     *             id       : <str> // overrides the ID attribute
+     *             rel      : <str> // overrides the rel attribute
+     *             class    : <str> // appended to current classes
+     *             <custom> : <str> // added as "data-<custom>" attribute
+     *         }
+     *
      *         // the array of answer objects to go with the question
      *         answers : [
      *             // answer 1
      *             {
      *                 id      : <str> // used for answer identification on submission
      *                 value   : <str> // the value submitted for this answer
-     *                 display : [str] // OPTIONAL: text displayed for the answer
+     *                 display : <str> // OPTIONAL: text displayed for the answer
      *                                 // if none is supplied it defaults to value
+     *                 attr    : {}    // same as question attr, see above
      *             }
      *         ]
      *     }

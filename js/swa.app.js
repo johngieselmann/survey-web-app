@@ -48,14 +48,16 @@
         results : {},
 
         /**
-         * The current, submit, and end section IDs.
-         * @var int currentSid
-         * @var int submitSid
-         * @var int endSid
+         * The beginning, current, submit, and end section jQuery objects.
+         * @var obj $beginSection
+         * @var obj $currentSection
+         * @var obj $submitSection
+         * @var obj $endSection
          */
-        currentSid : null,
-        submitSid  : null,
-        endSid     : null,
+        $beginSection   : $(".js-begin"),
+        $currentSection : $(".js-begin"),
+        $submitSection  : $(".js-submit"),
+        $endSection     : $(".js-end"),
 
         /**
          * Keep track whether or not the app has been submitted.
@@ -83,12 +85,16 @@
          */
         init : function(config) {
 
-            var setting
+            // update the settings based on the passed in configuration
+            config = config || {};
+            for (var i in config) {
+                app.settings[i] = config[i];
+            }
 
             // assign the other classes
             app.trans = appTrans;
 
-            // build the questions and answers
+            // place the questions and answers
             app.buildDataElements();
 
             // prepare app interaction
@@ -130,7 +136,10 @@
          * @author JohnG <john.gieselmann@gmail.com>
          */
         buildDataElements : function() {
-            var $main = $(".js-main");
+
+            // get the submit section so we can place the questions, in order,
+            // before it
+            var $submit = $(".js-submit");
 
             // loop through all the data and create their elements
             for (var i in app.data) {
@@ -152,21 +161,12 @@
 
                 // add the question section to the page
                 app.dataElements.push(dataEl);
-                $main.append(dataEl.question);
+                $submit.before(dataEl.question);
 
                 // add this question (unanswered) to the results object
                 app.results[qData.id] = null;
 
             }
-
-            // update the submit and end sid
-            var $submit = $("section[data-sid='submit']");
-            app.submitSid = app.dataElements.length + 1;
-            $submit.attr("data-sid", app.submitSid);
-
-            var $end = $("section[data-sid='end']");
-            app.endSid = app.dataElements.length + 2;
-            $end.attr("data-sid", app.endSid);
         },
 
         /**
@@ -193,6 +193,11 @@
                 .addClass("js-question question right-off " + numAnswers)
                 .attr("data-qid", qData.id)
                 .attr("data-sid", qData.id);
+
+            // add in custom attributes
+            if (typeof qData.attr === "object") {
+                app.addAttributes($el, qData.attr);
+            }
 
             $el.append($q);
 
@@ -224,7 +229,7 @@
                 .attr("data-value", aData.value)
                 .attr("data-aid", aData.id);
 
-            // add in custom classes
+            // add in custom attributes
             if (typeof aData.attr === "object") {
                 app.addAttributes($el, aData.attr);
             }
@@ -242,7 +247,8 @@
         },
 
         /**
-         * Add attributes to an element.
+         * Add attributes to an element. See the documentation in swa.data.js
+         * for specifications.
          *
          * @author JohnG <john.gieselmann@gmail.com
          *
@@ -289,7 +295,7 @@
             app.btns.back.addClass("inactive");
 
             // add the first question
-            app.loadSection(1);
+            app.nextSection();
 
         },
 
@@ -319,26 +325,34 @@
          *
          * @author JohnG <john.gieselmann@gmail.com>
          *
-         * @param int sid The question id being added to the app.
+         * @param str|int|obj section The section id or element being removed
+         *   from the app.
          *
          * @return void
          */
-        loadSection : function(sid) {
+        loadSection : function(section) {
+            console.log(section);
 
             // toggle the back button appropriately
-            if (sid === 1) {
-                app.toggleEl(app.btns.back, "inactive");
-            } else {
-                app.toggleEl(app.btns.back, "active");
-            }
+            // TODO: figure out toggling of back button
+            //jam
+//            if (sid === 1) {
+//                app.toggleEl(app.btns.back, "inactive");
+//            } else {
+//                app.toggleEl(app.btns.back, "active");
+//            }
 
-            // update the current question id
-            app.currentSid = sid;
+            // grab the section being loaded
+            var $section = section instanceof jQuery
+                ? section
+                : $("[data-sid='" + section + "']");
+            $section.addClass("active");
 
-            var $q = $("[data-sid='" + sid + "']");
-            $q.addClass("active");
+            // all loaded sections get moved in from the right
+            app.trans.sectionMove($section, "right", true);
 
-            app.trans.sectionMove($q, "right", true);
+            // update the current section
+            app.$currentSection = $section;
         },
 
         /**
@@ -346,18 +360,23 @@
          *
          * @author JohnG <john.gieselmann@gmail.com>
          *
-         * @param int sid The question id being removed from the app.
+         * @param str|int|obj section The section id or element being removed
+         *   from the app.
+         * @param str dir The direction in which to move the section.
          *
          * @return void
          */
-        unloadSection : function(sid, dir) {
+        unloadSection : function(section, dir) {
+
             // default is to remove to the left
             dir = dir || "left";
 
-            var $q = $("[data-sid='" + sid + "']");
-            $q.removeClass("active");
+            var $section = section instanceof jQuery
+                ? section
+                : $("[data-sid='" + section + "']");
+            $section.removeClass("active");
 
-            app.trans.sectionMove($q, dir, false);
+            app.trans.sectionMove($section, dir, false);
         },
 
         /**
@@ -369,13 +388,12 @@
          */
         nextSection : function() {
 
-            // get the next question id
-            var newSid = app.currentSid + 1;
+            // get the next section
+            var $next = app.$currentSection.next("section");
 
-            // if we are at the end of the question, allow submission
-            var $el = $(".js-question[data-sid='" + newSid + "']");
-            app.unloadSection(app.currentSid, "left");
-            app.loadSection(newSid);
+            // unload the current secton and move on to the next
+            app.unloadSection(app.$currentSection.attr("data-sid"), "left");
+            app.loadSection($next);
         },
 
         /**
@@ -386,16 +404,14 @@
          * @return void
          */
         previousSection : function() {
-            // get the previous question id
-            var newSid = app.currentSid - 1;
 
             // if we are at the beginning of the survey, do not go back
-            if (newSid <= 0) {
+            if (newSid === "begin") {
                 return false;
             } else {
-                var $el = $(".js-question[data-sid='" + newSid + "']");
-                app.unloadSection(app.currentSid, "right");
-                app.loadSection(newSid);
+                var $previous = app.$currentSection.previous("section");
+                app.unloadSection(app.$currentSection, "right");
+                app.loadSection($previous);
             }
         },
 
@@ -500,20 +516,52 @@
                 return false;
             }
             app.submitted = true;
-            console.log("submit: ", app.results);
 
-            // if online, submit
-            if (navigator.onLine) {
+            // if online and url was provided, post to the url
+            if (navigator.onLine && app.settings.url !== false) {
+
+                // create an object for posting the results
+                var postData = {
+                    results : app.results
+                };
+
+                // assign any custom submit parameters to the post data
+                if (typeof app.settings.submitParams === "object") {
+                    for (var i in app.settings.submitParams) {
+                        postData[i] = app.settings.submitParams[i];
+                    }
+                }
+
+                $.ajax({
+                    url     : app.settings.url,
+                    type    : "POST",
+                    data    : app.results,
+                    success : function(result) {
+                        console.log("result: ", result);
+                    },
+                    error   : function(a, b, c) {
+                        console.log("error a: ", a);
+                        console.log("error b: ", b);
+                        console.log("error c: ", c);
+                    }
+                });
+
             } else {
-                // otherwise, store locally
-                localStorage.setItem("sample_questionaire_results", JSON.stringify(app.results));
+                // store locally
+                localStorage.setItem(
+                    "sample_web_app",
+                    JSON.stringify(app.results)
+                );
+
+                // console log for debugging
+                console.log("RESULTS: ", app.results);
             }
 
             // load the end section and remove all others
-            app.loadSection(app.endSid);
+            app.loadSection(app.$endSection);
             app.btns.back.remove();
             setTimeout(function() {
-                $("section").not("[data-sid='" + app.endSid + "']").remove();
+                $("section").not(app.$endSection).remove();
             }, 1000);
         }
     };
