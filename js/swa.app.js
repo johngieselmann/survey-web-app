@@ -1,9 +1,3 @@
-/**
- * Self executing anonymous function to keep everything out of the global
- * scope.
- *
- * @author JohnG <john.gieselmann@upsync.com>
- */
  (function(window, document, $, undefined) {
 
     // keep track of some common jq objects
@@ -11,9 +5,9 @@
     $body = $("body");
 
     /**
-     * Object literal class.
+     * Singleton app class that handles the bulk of the work for the survey.
      *
-     * @author JohnG <john.gieselmann@upsync.com>
+     * @author JohnG <john.gieselmann@gmail.com>
      */
     var app = {
 
@@ -81,7 +75,7 @@
         /**
          * Initialize the application.
          *
-         * @author JohnG <john.gieselmann@upsync.com>
+         * @author JohnG <john.gieselmann@gmail.com>
          *
          * @param obj config The configuration for the questionnaire.
          *
@@ -106,7 +100,7 @@
         /**
          * Capture the elements for the app.
          *
-         * @author JohnG <john.gieselmann@upsync.com>
+         * @author JohnG <john.gieselmann@gmail.com>
          *
          * @return void
          */
@@ -120,7 +114,7 @@
         /**
          * Bind the events for the app.
          *
-         * @author JohnG <john.gieselmann@upsync.com>
+         * @author JohnG <john.gieselmann@gmail.com>
          *
          * @return void
          */
@@ -133,7 +127,7 @@
         /**
          * Build all the questions and answers for the app.
          *
-         * @author JohnG <john.gieselmann@upsync.com>
+         * @author JohnG <john.gieselmann@gmail.com>
          */
         buildDataElements : function() {
             var $main = $(".js-main");
@@ -178,7 +172,7 @@
         /**
          * Make a question for the app.
          *
-         * @author JohnG <john.gieselmann@upsync.com>
+         * @author JohnG <john.gieselmann@gmail.com>
          *
          * @param obj qData The question data.
          *
@@ -208,7 +202,7 @@
         /**
          * Make a button answer for a question.
          *
-         * @author JohnG <john.gieselmann@upsync.com>
+         * @author JohnG <john.gieselmann@gmail.com>
          *
          * @param obj qData The question data.
          * @param obj aData The answer data.
@@ -282,7 +276,7 @@
         /**
          * Begin the Q & A with question 1.
          *
-         * @author JohnG <john.gieselmann@upsync.com>
+         * @author JohnG <john.gieselmann@gmail.com>
          *
          * @return void
          */
@@ -302,7 +296,7 @@
         /**
          * Save an answer to the results.
          *
-         * @author JohnG <john.gieselmann@upsync.com>
+         * @author JohnG <john.gieselmann@gmail.com>
          *
          * @return void
          */
@@ -323,7 +317,7 @@
         /**
          * Load a section into the app.
          *
-         * @author JohnG <john.gieselmann@upsync.com>
+         * @author JohnG <john.gieselmann@gmail.com>
          *
          * @param int sid The question id being added to the app.
          *
@@ -350,7 +344,7 @@
         /**
          * Remove a section from the app screen.
          *
-         * @author JohnG <john.gieselmann@upsync.com>
+         * @author JohnG <john.gieselmann@gmail.com>
          *
          * @param int sid The question id being removed from the app.
          *
@@ -369,7 +363,7 @@
         /**
          * Move to the next section based on the current stored in the app.
          *
-         * @author JohnG <john.gieselmann@upsync.com>
+         * @author JohnG <john.gieselmann@gmail.com>
          *
          * @return void
          */
@@ -387,7 +381,7 @@
         /**
          * Move to the previous section based on the current stored in the app.
          *
-         * @author JohnG <john.gieselmann@upsync.com>
+         * @author JohnG <john.gieselmann@gmail.com>
          *
          * @return void
          */
@@ -408,7 +402,7 @@
         /**
          * Toggle a button from inactive to active and vice versa.
          *
-         * @author JohnG <john.gieselmann@upsync.com>
+         * @author JohnG <john.gieselmann@gmail.com>
          *
          * @param obj $el The jQuery element to toggle.
          * @param str force Which direction to force the element.
@@ -447,7 +441,7 @@
         /**
          * Toggle the other answers not chosen.
          *
-         * @author JohnG <john.gieselmann@upsync.com>
+         * @author JohnG <john.gieselmann@gmail.com>
          *
          * @param obj e The jQuery event.
          *
@@ -496,7 +490,7 @@
         /**
          * Submit the data.
          *
-         * @author JohnG <john.gieselmann@upsync.com>
+         * @author JohnG <john.gieselmann@gmail.com>
          *
          * @return void
          */
@@ -525,16 +519,17 @@
     };
 
     /**
-     * The transitioning of elements in the app.
+     * Singleton transition class for the survey app. It handles the specialized
+     * movement of elements within the survey.
      *
-     * @author JohnG <john.gieselmann@upsync.com>
+     * @author JohnG <john.gieselmann@gmail.com>
      */
     var appTrans = {
 
         /**
          * Move a section within the app.
          *
-         * @author JohnG <john.gieselmann@upsync.com>
+         * @author JohnG <john.gieselmann@gmail.com>
          *
          * @param obj $el The section jQuery element to move.
          * @param str direction The direction in which to move the section.
@@ -566,6 +561,6 @@
     };
 
     // assign the app to the window so it can be initialized elsewhere
-    window.QuestionnaireApp = app;
+    window.SurveyWebApp = app;
 
- })(window, document, $, undefined);
+ })(window, document, jQuery, undefined);

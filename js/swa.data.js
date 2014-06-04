@@ -77,5 +77,5 @@
     ];
 
     // assign the questions to the app
-    window.QuestionnaireApp.data = appData;
+    window.SurveyWebApp.data = appData;
 })(window);
