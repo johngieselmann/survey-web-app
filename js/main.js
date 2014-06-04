@@ -462,47 +462,6 @@
         }
     };
 
-    /**
-     * The form data (questions and answers). It is an array of question
-     * objects with all of their data.
-     */
-    var appData = [
-        // question 1
-        {
-            id: 1,
-            q : "What would you do for a Klondike bar?",
-            a : [
-                {
-                    id : 1,
-                    a  : "Nothing"
-                },
-                {
-                    id : 2,
-                    a  : "Kill a man"
-                }
-            ]
-        },
-
-        // question 2
-        {
-            id : 2,
-            q  : "How awesome are you?",
-            a  : [
-                {
-                    id : 1,
-                    a  : "Very"
-                },
-                {
-                    id : 2,
-                    a  : "Somewhat"
-                },
-                {
-                    id : 3,
-                    a  : "Not very"
-                }
-            ]
-        }
-    ];
 
     /**
      * The transitioning of elements in the app.
@@ -545,9 +504,7 @@
         }
     };
 
-    // initialize the app when the document is ready
-    $(document).ready(function() {
-        app.init();
-    });
+    // assign the app to the window so it can be initialized elsewhere
+    window.QuestionnaireApp = app;
 
  })(window, document, $, undefined);

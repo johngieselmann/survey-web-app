@@ -15,7 +15,6 @@
 
         <!-- JavaScript needed at load -->
         <script type="text/javascript" src="js/vendor/modernizr-2.7.0.min.js"></script>
-        <script type="text/javascript" src="js/util.js"></script>
 
         <!--
             CREDITS:
@@ -23,14 +22,20 @@
     </head>
     <body>
 
+        <!--
+            Questionnaire Content:
+            1. Classes and other attributes can be added, but none should
+               be removed.
+            2. Elements should remain in place and in the same order, lest
+               you modify the JS.
+            3. The text can be changed without consequence.
+        -->
+
         <main class="js-main">
             <section class="js-begin left-on" data-sid="0">
                 <h1>Questionaire</h1>
                 <button class="js-btn-begin btn-begin">Begin</button>
             </section>
-
-            <!-- Questions go here -->
-
             <section class="js-submit right-off" data-sid="submit">
                 <h1>All done.</h1>
                 <button class="js-btn-submit btn-submit">Submit</button>
@@ -42,11 +47,12 @@
 
         <footer>
             <button class="js-btn-back progress-btn btn-back">Back</button>
+            <a class="fa fa-back"></a>
         </footer>
 
         <script type="text/javascript" src="js/vendor/jquery.js"></script>
-        <script type="text/javascript" src="js/plugins.js"></script>
-        <script type="text/javascript" src="js/main.js"></script>
+        <script type="text/javascript" src="js/qa.main.js"></script>
+        <script type="text/javascript" src="js/qa.questions.js"></script>
 
     </body>
 </html>
