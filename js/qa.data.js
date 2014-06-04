@@ -7,17 +7,17 @@
      * var appData = [
      *     // question 1
      *     {
-     *         id      : <value> // used for question identification on submission
-     *         display : <value> // actual text displayed for the question
+     *         id      : <str> // used for question identification on submission
+     *         display : <str> // actual text displayed for the question
      *
      *         // the array of answer objects to go with the question
      *         answers : [
      *             // answer 1
      *             {
-     *                 id      : <value> // used for answer identification on submission
-     *                 value   : <value> // the value submitted for this answer
-     *                 display : [value] // OPTIONAL: text displayed for the answer
-     *                                   // if none is supplied it defaults to value
+     *                 id      : <str> // used for answer identification on submission
+     *                 value   : <str> // the value submitted for this answer
+     *                 display : [str] // OPTIONAL: text displayed for the answer
+     *                                 // if none is supplied it defaults to value
      *             }
      *         ]
      *     }
@@ -27,36 +27,50 @@
     var appData = [
         // question 1
         {
-            id      : 1,
-            display : "What would you do for a Klondike bar?",
-            a : [
+            "id"      : "age_range",
+            "display" : "What is your age range?",
+            "attr"    : {
+                "class" : "jam central station"
+            },
+
+            "answers" : [
                 {
-                    id : 1,
-                    a  : "Nothing"
+                    "id"      : 1,
+                    "value"   : "1-18",
+                    "display" : "1-18"
                 },
                 {
-                    id : 2,
-                    a  : "Kill a man"
+                    "id"      : 2,
+                    "value"   : "19-30",
+                    "display" : "19-30",
+                    "attr"    : {
+                        "class" : "boom"
+                    }
                 }
             ]
         },
 
         // question 2
         {
-            id : 2,
-            q  : "How awesome are you?",
-            a  : [
+            "id"      : "gender",
+            "display" : "What is your gender?",
+            "attr"    : {
+                "class" : "jam central station"
+            },
+
+            "answers" : [
                 {
-                    id : 1,
-                    a  : "Very"
+                    "id"      : 1,
+                    "value"   : "male",
+                    "display" : "Male"
                 },
                 {
-                    id : 2,
-                    a  : "Somewhat"
-                },
-                {
-                    id : 3,
-                    a  : "Not very"
+                    "id"      : 2,
+                    "value"   : "female",
+                    "display" : "Female",
+                    "attr"    : {
+                        "class" : "jam central station"
+                    }
                 }
             ]
         }

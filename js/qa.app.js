@@ -70,13 +70,26 @@
         submitted : false,
 
         /**
+         * The settings for the app which are overridden by the config on init.
+         * @var obj settings
+         */
+        settings : {
+            url : false // full URL for form submission, if false stored
+                        // in localStorage and logged to console (debug)
+        },
+
+        /**
          * Initialize the application.
          *
          * @author JohnG <john.gieselmann@upsync.com>
          *
+         * @param obj config The configuration for the questionnaire.
+         *
          * @return void
          */
-        init : function() {
+        init : function(config) {
+
+            var setting
 
             // assign the other classes
             app.trans = appTrans;
@@ -127,27 +140,29 @@
 
             // loop through all the data and create their elements
             for (var i in app.data) {
+
+                // get the question data and start this data element object
                 var qData = app.data[i];
                 var dataEl = {
-                    q : app.makeQuestion(qData),
-                    a : []
+                    question : app.makeQuestion(qData),
+                    answers  : []
                 };
 
-                // add this to the results object
-                app.results[qData.id] = null;
-
                 // create all the answers for this question
-                for (var j in qData.a) {
-                    var $a = app.makeAnswer(qData, qData.a[j]);
+                for (var j in qData.answers) {
+                    var $a = app.makeAnswer(qData, qData.answers[j]);
 
-                    // add the appropriate class
-                    $a.addClass("answer-" + qData.a.length);
-                    dataEl.a.push($a);
-                    dataEl.q.append($a);
+                    dataEl.answers.push($a);
+                    dataEl.question.append($a);
                 }
 
+                // add the question section to the page
                 app.dataElements.push(dataEl);
-                $main.append(dataEl.q);
+                $main.append(dataEl.question);
+
+                // add this question (unanswered) to the results object
+                app.results[qData.id] = null;
+
             }
 
             // update the submit and end sid
@@ -171,13 +186,17 @@
          */
         makeQuestion : function(qData) {
 
+            // create a CSS class name based on the number of available
+            // answers for this question
+            var numAnswers = "num-answers-" + qData.answers.length;
+
             // create the question text
             var $q = $("<h1></h1>")
-                .text(qData.q);
+                .text(qData.display);
 
             // create the containing section
             var $el = $("<section></section>")
-                .addClass("js-question question right-off")
+                .addClass("js-question question right-off " + numAnswers)
                 .attr("data-qid", qData.id)
                 .attr("data-sid", qData.id);
 
@@ -198,12 +217,23 @@
          */
         makeAnswer : function(qData, aData) {
 
+            // get the display text if present, otherwise default to value
+            var display = typeof aData.display !== "undefined"
+                ? aData.display
+                : aData.value;
+
             // create the answer button
             var $el = $("<button></button>")
-                .text(aData.a)
+                .text(display)
                 .addClass("js-answer answer")
                 .attr("data-qid", qData.id)
+                .attr("data-value", aData.value)
                 .attr("data-aid", aData.id);
+
+            // add in custom classes
+            if (typeof aData.attr === "object") {
+                app.addAttributes($el, aData.attr);
+            }
 
             // bind the events to the button
             $el.on("click", app.saveAnswer);
@@ -212,6 +242,38 @@
             // allow hover states for non-touch devices
             if (!Modernizr.touch) {
                 $el.on("mouseover mouseout", app.toggleNotChosen);
+            }
+
+            return $el;
+        },
+
+        /**
+         * Add attributes to an element.
+         *
+         * @author JohnG <john.gieselmann@gmail.com
+         *
+         * @param obj $el The jQuery element getting the attributes.
+         * @param obj attr The key value attributes being added.
+         *
+         * @return $el The finished element.
+         */
+        addAttributes : function($el, attr) {
+            for (var name in attr) {
+                switch (name) {
+
+                    case "class":
+                        $el.addClass(" " + attr[name]);
+                        break;
+
+                    case "rel":
+                    case "id":
+                        $el.attr(name, attr[name]);
+                        break;
+
+                    default:
+                        $el.attr("data-" + name, attr[name]);
+                        break;
+                }
             }
 
             return $el;
