@@ -7,18 +7,13 @@
         <meta name="description" content="Sample Form App">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
         <!-- Styles -->
         <link rel="stylesheet" type="text/css" href="css/reset.css">
         <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
-        <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link rel="stylesheet" type="text/css" href="css/qa.main.css">
 
         <!-- JavaScript needed at load -->
         <script type="text/javascript" src="js/vendor/modernizr-2.7.0.min.js"></script>
-
-        <!--
-            CREDITS:
-        -->
     </head>
     <body>
 
@@ -51,8 +46,17 @@
         </footer>
 
         <script type="text/javascript" src="js/vendor/jquery.js"></script>
-        <script type="text/javascript" src="js/qa.main.js"></script>
-        <script type="text/javascript" src="js/qa.questions.js"></script>
+        <script type="text/javascript" src="js/qa.app.js"></script>
+        <script type="text/javascript" src="js/qa.data.js"></script>
+
+        <script type="text/javascript">
+            var config = {
+                url : false
+            };
+
+            var qa = window.QuestionnaireApp;
+            qa.init(config);
+        </script>
 
     </body>
 </html>

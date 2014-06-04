@@ -27,7 +27,8 @@
         },
 
         /**
-         * The form data and its corresponding elements.
+         * The form data and its corresponding elements. The data gets assigned
+         * to the app in qa.data.js
          * @var arr data
          * @var arr dataElements
          */
@@ -78,7 +79,6 @@
         init : function() {
 
             // assign the other classes
-            app.data = appData;
             app.trans = appTrans;
 
             // build the questions and answers
@@ -461,7 +461,6 @@
             }, 1000);
         }
     };
-
 
     /**
      * The transitioning of elements in the app.
