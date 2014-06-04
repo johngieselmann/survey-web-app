@@ -18,6 +18,8 @@ Clone this repository to your site / server.
 git clone https://git@github.com/johngieselmann/survey-web-app
 ```
 
+Change the button text and 
+
 Add your questions and answers to the `js/swa.data.js` file following the
 guidlines outlined below and in the file.
 ```
@@ -41,8 +43,7 @@ var appData = [
         answers : [
             // answer 1
             {
-                id      : <str> // used for answer identification on submission
-                value   : <str> // the value submitted for this answer
+                value   : <str> // the answer value submitted for the question
                 display : <str> // OPTIONAL: text displayed for the answer
                                 // if none is supplied it defaults to value
                 attr    : {}    // same as question attr, see above
@@ -56,12 +57,15 @@ Initialize the app anywhere after the two JavaScript files have been added
 to the page `js/swa.app.js` and `js/swa.data.js`
 ```
 <script type="text/javascript">
-    // the configuration for the 
+    // the configuration for the survey
     var config = {
-        url : false
+        url : "http://example.com/survey"
     };
 
     var swa = window.SurveyWebApp;
     swa.init(config);
 </script>
 ```
+
+## Configuration
+

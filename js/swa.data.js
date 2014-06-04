@@ -24,8 +24,7 @@
      *         answers : [
      *             // answer 1
      *             {
-     *                 id      : <str> // used for answer identification on submission
-     *                 value   : <str> // the value submitted for this answer
+     *                 value   : <str> // the answer value submitted for the question
      *                 display : <str> // OPTIONAL: text displayed for the answer
      *                                 // if none is supplied it defaults to value
      *                 attr    : {}    // same as question attr, see above
@@ -46,12 +45,10 @@
 
             "answers" : [
                 {
-                    "id"      : 1,
                     "value"   : "1-18",
                     "display" : "1-18"
                 },
                 {
-                    "id"      : 2,
                     "value"   : "19-30",
                     "display" : "19-30",
                     "attr"    : {
@@ -71,12 +68,10 @@
 
             "answers" : [
                 {
-                    "id"      : 1,
                     "value"   : "male",
                     "display" : "Male"
                 },
                 {
-                    "id"      : 2,
                     "value"   : "female",
                     "display" : "Female",
                     "attr"    : {

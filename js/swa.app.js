@@ -12,22 +12,49 @@
     var app = {
 
         /**
-         * The app buttons.
+         * The beginning, current, submit, and end elements.
+         * @var obj section.$begin
+         * @var obj section.$current
+         * @var obj section.$submit
+         * @var obj section.$end
          */
-        btns : {
-            back   : null,
-            begin  : null,
-            submit : null
+        section : {
+            $begin   : null,
+            $current : null,
+            $submit  : null,
+            $end     : null
         },
 
         /**
-         * The form data and its corresponding elements. The data gets assigned
-         * to the app in qa.data.js
+         * The survey button elements.
+         * @var obj btn.$begin
+         * @var obj btn.$submit
+         * @var obj btn.$end
+         */
+        btn : {
+            $back   : null,
+            $begin  : null,
+            $submit : null
+        },
+
+        /**
+         * The survey text elements.
+         * @var obj text.$begin
+         * @var obj text.$submit
+         * @var obj text.$end
+         */
+        text : {
+            $begin  : null,
+            $submit : null,
+            $end    : null
+        },
+
+        /**
+         * The questions and answers data. The data gets assigned to the app
+         * in qa.data.js
          * @var arr data
-         * @var arr dataElements
          */
         data         : null,
-        dataElements : [],
 
         /**
          * The navigation class
@@ -48,18 +75,6 @@
         results : {},
 
         /**
-         * The beginning, current, submit, and end section jQuery objects.
-         * @var obj $beginSection
-         * @var obj $currentSection
-         * @var obj $submitSection
-         * @var obj $endSection
-         */
-        $beginSection   : $(".js-begin"),
-        $currentSection : $(".js-begin"),
-        $submitSection  : $(".js-submit"),
-        $endSection     : $(".js-end"),
-
-        /**
          * Keep track whether or not the app has been submitted.
          * @var bool submitted
          */
@@ -70,8 +85,34 @@
          * @var obj settings
          */
         settings : {
-            url : false // full URL for form submission, if false stored
-                        // in localStorage and logged to console (debug)
+
+            // the title of the survey used in storing the data in localStorage
+            title        : "survey_web_app",
+
+            // full URL for submitting the results. if false, results are
+            // saved in localStorage and logged to console for debugging
+            url          : false,
+
+            // text inserted as the heading of the section with the
+            // corresponding key
+            sectionText  : {
+                "begin"  : "Survey Web App",
+                "submit" : "All done?",
+                "end"    : "Thank you for your submission!"
+            },
+
+            // text assigned to the buttons corresponding to the key
+            btnText      : {
+                "begin"  : "Begin",
+                "back"   : "",
+                "submit" : "Submit"
+            },
+
+            // additional parameters needed for submission, could be authentication
+            submitParams : {
+
+            }
+
         },
 
         /**
@@ -87,19 +128,37 @@
 
             // update the settings based on the passed in configuration
             config = config || {};
-            for (var i in config) {
-                app.settings[i] = config[i];
+            try {
+
+                for (var i in config) {
+                    // make sure we catch nested objects
+                    if (typeof config[i] === "object") {
+                        for (var j in config[i]) {
+                            app.settings[i][j] = config[i][j];
+                        }
+                    } else {
+                        app.settings[i] = config[i];
+                    }
+                }
+
+            } catch (e) {
+                console.log("You're doing something illegal:", e);
             }
 
             // assign the other classes
             app.trans = appTrans;
 
-            // place the questions and answers
-            app.buildDataElements();
-
             // prepare app interaction
             app.captureElements();
             app.bindEvents();
+
+            // set the current section to the beginning
+            app.section.$current = app.section.$begin;
+
+            // place the text, buttons, and questions and answers
+            app.prepareSectionText();
+            app.prepareBtnText();
+            app.prepareData();
 
         },
 
@@ -111,9 +170,22 @@
          * @return void
          */
         captureElements : function() {
+            // get all the sections
+            for (var s in app.section) {
+                var sectionName = s.replace(/^\$/, "");
+                app.section[s] = $("section.js-" + sectionName);
+            }
+
             // get all the buttons
-            for (var i in app.btns) {
-                app.btns[i] = $(".js-btn-" + i);
+            for (var b in app.btn) {
+                var btnName = b.replace(/^\$/, "");
+                app.btn[b] = $(".js-btn-" + btnName);
+            }
+
+            // get all the text displays
+            for (var t in app.text) {
+                var textName = t.replace(/^\$/, "");
+                app.text[t] = $(".js-text-" + textName);
             }
         },
 
@@ -125,47 +197,68 @@
          * @return void
          */
         bindEvents : function() {
-            app.btns.begin.on("click", app.begin);
-            app.btns.back.on("click", app.previousSection);
-            app.btns.submit.on("click", app.submit);
+            app.btn.$begin.on("click", app.begin);
+            app.btn.$back.on("click", app.previousSection);
+            app.btn.$submit.on("click", app.submit);
         },
 
         /**
-         * Build all the questions and answers for the app.
+         * Set the text for the predefined sections titles.
          *
          * @author JohnG <john.gieselmann@gmail.com>
+         *
+         * @return void
          */
-        buildDataElements : function() {
+        prepareSectionText : function() {
+            for (var i in app.settings.sectionText) {
+                var name = "$" + i;
+                app.text[name].text(app.settings.sectionText[i]);
+            }
+        },
 
-            // get the submit section so we can place the questions, in order,
-            // before it
-            var $submit = $(".js-submit");
+        /**
+         * Set the text for the survey buttons.
+         *
+         * @author JohnG <john.gieselmann@gmail.com>
+         *
+         * @return void
+         */
+        prepareBtnText : function() {
+            for (var i in app.settings.btnText) {
+                var name = "$" + i;
+                app.btn[name].text(app.settings.btnText[i]);
+            }
+        },
+
+        /**
+         * Build all the questions and answers for the app and place them
+         * on the page.
+         *
+         * @author JohnG <john.gieselmann@gmail.com>
+         *
+         * @return void
+         */
+        prepareData : function() {
 
             // loop through all the data and create their elements
             for (var i in app.data) {
 
-                // get the question data and start this data element object
+                // get the question data and create its element
                 var qData = app.data[i];
-                var dataEl = {
-                    question : app.makeQuestion(qData),
-                    answers  : []
-                };
+                var $question = app.makeQuestion(qData);
 
                 // create all the answers for this question
                 for (var j in qData.answers) {
                     var $a = app.makeAnswer(qData, qData.answers[j]);
-
-                    dataEl.answers.push($a);
-                    dataEl.question.append($a);
+                    $question.append($a);
                 }
 
-                // add the question section to the page
-                app.dataElements.push(dataEl);
-                $submit.before(dataEl.question);
+                // add the question section to the page just before the
+                // submit section
+                app.section.$submit.before($question);
 
                 // add this question (unanswered) to the results object
                 app.results[qData.id] = null;
-
             }
         },
 
@@ -226,8 +319,7 @@
                 .text(display)
                 .addClass("js-answer answer")
                 .attr("data-qid", qData.id)
-                .attr("data-value", aData.value)
-                .attr("data-aid", aData.id);
+                .attr("data-value", aData.value);
 
             // add in custom attributes
             if (typeof aData.attr === "object") {
@@ -262,7 +354,7 @@
                 switch (name) {
 
                     case "class":
-                        $el.addClass(" " + attr[name]);
+                        $el.addClass(attr[name]);
                         break;
 
                     case "rel":
@@ -292,7 +384,7 @@
             app.trans.sectionMove($(".js-begin"));
 
             // show the proper buttons
-            app.btns.back.addClass("inactive");
+            app.btn.$back.addClass("inactive");
 
             // add the first question
             app.nextSection();
@@ -316,7 +408,7 @@
                 .addClass("not-chosen");
 
             // add the answer to the results object
-            app.results[$el.attr("data-qid")] = $el.attr("data-aid");
+            app.results[$el.attr("data-qid")] = $el.attr("data-value");
 
         },
 
@@ -333,26 +425,28 @@
         loadSection : function(section) {
             console.log(section);
 
-            // toggle the back button appropriately
-            // TODO: figure out toggling of back button
-            //jam
-//            if (sid === 1) {
-//                app.toggleEl(app.btns.back, "inactive");
-//            } else {
-//                app.toggleEl(app.btns.back, "active");
-//            }
-
             // grab the section being loaded
             var $section = section instanceof jQuery
                 ? section
                 : $("[data-sid='" + section + "']");
             $section.addClass("active");
 
+            // do not allow the back button if we are at the beginning
+            // or if we are only on the first slide
+            var $prev = $section.prev("section");
+            if (   $section.is(app.section.$begin)
+                || $prev.is(app.section.$begin)
+            ) {
+                app.toggleEl(app.btn.$back, "inactive");
+            } else {
+                app.toggleEl(app.btn.$back, "active");
+            }
+
             // all loaded sections get moved in from the right
             app.trans.sectionMove($section, "right", true);
 
             // update the current section
-            app.$currentSection = $section;
+            app.section.$current = $section;
         },
 
         /**
@@ -389,10 +483,10 @@
         nextSection : function() {
 
             // get the next section
-            var $next = app.$currentSection.next("section");
+            var $next = app.section.$current.next("section");
 
             // unload the current secton and move on to the next
-            app.unloadSection(app.$currentSection.attr("data-sid"), "left");
+            app.unloadSection(app.section.$current.attr("data-sid"), "left");
             app.loadSection($next);
         },
 
@@ -406,11 +500,11 @@
         previousSection : function() {
 
             // if we are at the beginning of the survey, do not go back
-            if (newSid === "begin") {
+            var $previous = app.section.$current.prev("section");
+            if ($previous.is(".js-begin")) {
                 return false;
             } else {
-                var $previous = app.$currentSection.previous("section");
-                app.unloadSection(app.$currentSection, "right");
+                app.unloadSection(app.section.$current, "right");
                 app.loadSection($previous);
             }
         },
@@ -515,27 +609,30 @@
             if (app.submitted === true) {
                 return false;
             }
+
+            var timestamp = Date.now();
             app.submitted = true;
+
+            // create an object for posting the results
+            var postData = {
+                results   : app.results,
+                timestamp : Date.now()
+            };
+
+            // assign any custom submit parameters to the post data
+            if (typeof app.settings.submitParams === "object") {
+                for (var i in app.settings.submitParams) {
+                    postData[i] = app.settings.submitParams[i];
+                }
+            }
 
             // if online and url was provided, post to the url
             if (navigator.onLine && app.settings.url !== false) {
 
-                // create an object for posting the results
-                var postData = {
-                    results : app.results
-                };
-
-                // assign any custom submit parameters to the post data
-                if (typeof app.settings.submitParams === "object") {
-                    for (var i in app.settings.submitParams) {
-                        postData[i] = app.settings.submitParams[i];
-                    }
-                }
-
                 $.ajax({
                     url     : app.settings.url,
                     type    : "POST",
-                    data    : app.results,
+                    data    : postData,
                     success : function(result) {
                         console.log("result: ", result);
                     },
@@ -548,20 +645,21 @@
 
             } else {
                 // store locally
+                var storeName = app.settings.title.toLowerCase().replace(/\s/g, "_");
                 localStorage.setItem(
-                    "sample_web_app",
-                    JSON.stringify(app.results)
+                    app.settings.title,
+                    JSON.stringify(postData)
                 );
 
                 // console log for debugging
-                console.log("RESULTS: ", app.results);
+                console.log("RESULTS: ", postData);
             }
 
             // load the end section and remove all others
-            app.loadSection(app.$endSection);
-            app.btns.back.remove();
+            app.loadSection(app.section.$end);
+            app.btn.$back.remove();
             setTimeout(function() {
-                $("section").not(app.$endSection).remove();
+                $("section").not(app.section.$end).remove();
             }, 1000);
         }
     };

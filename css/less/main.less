@@ -70,6 +70,10 @@ button {
     .borderRadius();
 }
 
+.fa {
+    font-family: "FontAwesome";
+}
+
 /* ==========================================================================
    Buttons
    ========================================================================== */
@@ -182,10 +186,13 @@ footer {
 /* Buttons
    ========================================================================== */
 .progress-btn {
-    margin: .5em;
+    width: 2em;
+    height: 2em;
 
-    font-size: 1.5em;
-    color: @white;
+    font-size: 2.5em;
+    line-height: 2em;
+    text-align: center;
+//    color: @white;
     cursor: default;
 
     .opacity(0);
@@ -194,12 +201,13 @@ footer {
 
 .progress-btn.active {
     cursor: pointer;
-    .background(@secondary);
+//    .background(@secondary);
     .opacity(100);
 }
 
 .progress-btn.inactive {
-    .background(#eee);
+    color: @grey;
+//    .background(#eee);
     .opacity(100);
 }
 
