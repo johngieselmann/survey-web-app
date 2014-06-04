@@ -113,9 +113,7 @@ section {
   -webkit-backface-visibility: hidden;
 }
 section h1 {
-  width: 10em;
-  margin: 0 auto;
-  padding: .5em;
+  padding: .5em 1em;
   text-align: center;
   font-size: 1.8em;
   color: #1b2026;
@@ -148,9 +146,13 @@ section.right-off {
   transition: left 300ms ease-in;
   -webkit-backface-visibility: hidden;
 }
+/* Questions
+   ========================================================================== */
 /* Answers
    ========================================================================== */
-button.answer {
+.answer {
+  display: table;
+  float: left;
   width: 10em;
   height: 10em;
   margin: 1em;
@@ -177,7 +179,16 @@ button.answer {
   transition: all 300ms ease-in;
   -webkit-backface-visibility: hidden;
 }
-button.answer.not-chosen {
+.answer p {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+.num-answers-6 .answer {
+  width: 8em;
+  height: 8em;
+}
+.answer.not-chosen {
   background: #cabdc6;
 }
 /* ==========================================================================

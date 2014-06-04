@@ -50,10 +50,23 @@
                 },
                 {
                     "value"   : "19-30",
-                    "display" : "19-30",
-                    "attr"    : {
-                        "class" : "boom"
-                    }
+                    "display" : "19-30"
+                },
+                {
+                    "value"   : "31-50",
+                    "display" : "31-50"
+                },
+                {
+                    "value"   : "51-70",
+                    "display" : "51-70"
+                },
+                {
+                    "value"   : "71+",
+                    "display" : "71+"
+                },
+                {
+                    "value"   : "na",
+                    "display" : "Pass"
                 }
             ]
         },

@@ -315,11 +315,14 @@
                 : aData.value;
 
             // create the answer button
-            var $el = $("<button></button>")
-                .text(display)
+            var $text = $("<p></p>")
+                .text(display);
+
+            var $el = $("<div></div>")
                 .addClass("js-answer answer")
                 .attr("data-qid", qData.id)
-                .attr("data-value", aData.value);
+                .attr("data-value", aData.value)
+                .append($text);
 
             // add in custom attributes
             if (typeof aData.attr === "object") {
