@@ -246,11 +246,12 @@
                 // get the question data and create its element
                 var qData = app.data[i];
                 var $question = app.makeQuestion(qData);
+                var $answers = $question.find(".js-answers");
 
                 // create all the answers for this question
                 for (var j in qData.answers) {
                     var $a = app.makeAnswer(qData, qData.answers[j]);
-                    $question.append($a);
+                    $answers.append($a);
                 }
 
                 // add the question section to the page just before the
@@ -260,6 +261,12 @@
                 // add this question (unanswered) to the results object
                 app.results[qData.id] = null;
             }
+
+            // now set the height of all the answers
+            $(".js-answer").each(function() {
+                var $answer = $(this);
+                $answer.height($answer.width());
+            });
         },
 
         /**
@@ -278,8 +285,11 @@
             var numAnswers = "num-answers-" + qData.answers.length;
 
             // create the question text
-            var $q = $("<h1></h1>")
+            var $qText = $("<h1></h1>")
                 .text(qData.display);
+
+            var $answers = $("<div></div>")
+                .addClass("answers js-answers");
 
             // create the containing section
             var $el = $("<section></section>")
@@ -292,7 +302,9 @@
                 app.addAttributes($el, qData.attr);
             }
 
-            $el.append($q);
+            // add in the text and answers holder
+            $el.append($qText);
+            $el.append($answers);
 
             return $el;
         },
