@@ -27,12 +27,14 @@
 
         /**
          * The survey button elements.
-         * @var obj btn.$begin
+         * @var obj btn.$prev
+         * @var obj btn.$next
          * @var obj btn.$submit
          * @var obj btn.$end
          */
         btn : {
-            $back   : null,
+            $prev   : null,
+            $next   : null,
             $begin  : null,
             $submit : null
         },
@@ -104,7 +106,8 @@
             // text assigned to the buttons corresponding to the key
             btnText      : {
                 "begin"  : "Begin",
-                "back"   : "",
+                "prev"   : "",
+                "next"   : "",
                 "submit" : "Submit"
             },
 
@@ -198,7 +201,8 @@
          */
         bindEvents : function() {
             app.btn.$begin.on("click", app.begin);
-            app.btn.$back.on("click", app.previousSection);
+            app.btn.$prev.on("click", app.previousSection);
+            app.btn.$next.on("click", app.nextSection);
             app.btn.$submit.on("click", app.submit);
 
             $win.on("resize", app.scaleAnswers);
@@ -228,6 +232,7 @@
         prepareBtnText : function() {
             for (var i in app.settings.btnText) {
                 var name = "$" + i;
+                console.log(name);
                 app.btn[name].text(app.settings.btnText[i]);
             }
         },
@@ -413,7 +418,8 @@
             app.trans.sectionMove($(".js-begin"));
 
             // show the proper buttons
-            app.btn.$back.addClass("inactive");
+            app.btn.$prev.addClass("inactive");
+            app.btn.$next.addClass("inactive");
 
             // add the first question
             app.nextSection();
@@ -430,11 +436,12 @@
         saveAnswer : function() {
             var $el = $(this)
                 .removeClass("not-chosen")
-                .addClass("chosen");
+                .removeClass("js-not-chosen")
+                .addClass("chosen js-chosen");
 
             // update the chosen and not chosen status
             var $notChosen = $el.siblings()
-                .addClass("not-chosen");
+                .addClass("js-not-chosen not-chosen");
 
             // add the answer to the results object
             app.results[$el.attr("data-qid")] = $el.attr("data-value");
@@ -465,9 +472,19 @@
             if (   $section.is(app.section.$begin)
                 || $prev.is(app.section.$begin)
             ) {
-                app.toggleEl(app.btn.$back, "inactive");
+                app.toggleEl(app.btn.$prev, "inactive");
             } else {
-                app.toggleEl(app.btn.$back, "active");
+                app.toggleEl(app.btn.$prev, "active");
+            }
+
+            // do not allow the next button if we are at the submit or an
+            // unchosen answer slide
+            if (   $section.is(app.section.$submit)
+                || $section.find(".js-chosen").length < 1
+            ) {
+                app.toggleEl(app.btn.$next, "inactive");
+            } else {
+                app.toggleEl(app.btn.$next, "active");
             }
 
             // all loaded sections get moved in from the right
@@ -509,6 +526,14 @@
          * @return void
          */
         nextSection : function() {
+            // check if this is a question and that it has been answered
+            //jam
+            if (   app.section.$current.is(".js-question")
+                && app.section.$current.find(".js-chosen").length < 1
+            ) {
+                console.log("nope");
+                return false;
+            }
 
             // get the next section
             var $next = app.section.$current.next("section");
@@ -595,9 +620,10 @@
 
                 switch (e.type) {
                     case "mouseover":
-                        $el.removeClass("not-chosen");
+                        $el.removeClass("not-chosen")
+                            .removeClass(".js-not-chosen");
                         $answers.not($el)
-                            .addClass("not-chosen");
+                            .addClass("not-chosen js-not-chosen");
                         break;
 
                     case "mouseout":
@@ -607,7 +633,7 @@
                         var $chosen = null;
                         $answers.each(function() {
                             var $answer = $(this);
-                            if ($answer.is(".chosen")) {
+                            if ($answer.is(".js-chosen")) {
                                 $chosen = $answer;
                                 return false;
                             }
@@ -615,9 +641,10 @@
 
                         if ($chosen) {
                             $answers.not($chosen)
-                                .addClass("not-chosen");
+                                .addClass("not-chosen js-not-chosen");
                         } else {
-                            $answers.removeClass("not-chosen");
+                            $answers.removeClass("not-chosen")
+                                .removeClass("js-not-chosen");
                         }
                         break;
                 }
@@ -685,7 +712,7 @@
 
             // load the end section and remove all others
             app.nextSection();
-            app.btn.$back.remove();
+            app.btn.$prev.remove();
             setTimeout(function() {
                 $("section").not(app.section.$end).remove();
             }, 1000);
