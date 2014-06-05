@@ -200,6 +200,8 @@
             app.btn.$begin.on("click", app.begin);
             app.btn.$back.on("click", app.previousSection);
             app.btn.$submit.on("click", app.submit);
+
+            $win.on("resize", app.scaleAnswers);
         },
 
         /**
@@ -262,7 +264,19 @@
                 app.results[qData.id] = null;
             }
 
-            // now set the height of all the answers
+            // scale the answer buttons
+            app.scaleAnswers();
+        },
+
+        /**
+         * Scale the size of the answer buttons to be circles.
+         *
+         * @author JohnG <john.gieselmann@gmail.com>
+         *
+         * @return void
+         */
+        scaleAnswers : function() {
+            // set the height of each answer equal to its width
             $(".js-answer").each(function() {
                 var $answer = $(this);
                 $answer.height($answer.width());
