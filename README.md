@@ -87,7 +87,7 @@ Here are the possible configurations for the app when you initialize the survey.
 
 - **title** str *default : "survey_web_app"* - The title of the survey used
 in storing the data in localStorage
-- **url** str|bool *default : false* - The full URL for submitting the results.
+- **url** str | bool *default : false* - The full URL for submitting the results.
 If false, results are saved in localStorage and logged to the console for debug.
 - **submitParams** obj *default : {}* - Additional parameters to be submitted
 with the ajax request upon survey completion / submission.
