@@ -140,11 +140,8 @@
             // set the current section to the beginning
             app.section.$current = app.section.$begin;
 
-            // place the text, buttons, and questions and answers
-            app.prepareSectionText();
-            app.prepareBtnText();
+            // place the questions and answers
             app.prepareData();
-
         },
 
         /**
