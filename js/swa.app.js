@@ -95,27 +95,9 @@
             // saved in localStorage and logged to console for debugging
             url          : false,
 
-            // text inserted as the heading of the section with the
-            // corresponding key
-            sectionText  : {
-                "begin"  : "Survey Web App",
-                "submit" : "All done?",
-                "end"    : "Thank you for your submission!"
-            },
-
-            // text assigned to the buttons corresponding to the key
-            btnText      : {
-                "begin"  : "Begin",
-                "prev"   : "",
-                "next"   : "",
-                "submit" : "Submit"
-            },
-
             // additional parameters needed for submission, could be authentication
-            submitParams : {
-
-            }
-
+            // could be... whatever else you want to submit
+            submitParams : {}
         },
 
         /**
@@ -206,34 +188,6 @@
             app.btn.$submit.on("click", app.submit);
 
             $win.on("resize", app.scaleAnswers);
-        },
-
-        /**
-         * Set the text for the predefined sections titles.
-         *
-         * @author JohnG <john.gieselmann@gmail.com>
-         *
-         * @return void
-         */
-        prepareSectionText : function() {
-            for (var i in app.settings.sectionText) {
-                var name = "$" + i;
-                app.text[name].text(app.settings.sectionText[i]);
-            }
-        },
-
-        /**
-         * Set the text for the survey buttons.
-         *
-         * @author JohnG <john.gieselmann@gmail.com>
-         *
-         * @return void
-         */
-        prepareBtnText : function() {
-            for (var i in app.settings.btnText) {
-                var name = "$" + i;
-                app.btn[name].text(app.settings.btnText[i]);
-            }
         },
 
         /**

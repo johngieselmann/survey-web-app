@@ -59,9 +59,14 @@ to the page `js/swa.app.js` and `js/swa.data.js`
 <script type="text/javascript">
     // the configuration for the survey
     var config = {
-        url : "http://example.com/survey"
+        title        : "My Survey",
+        url          : "http://example.com/survey",
+        submitParams : {
+            // none
+        }
     };
 
+    // initialize the survey
     var swa = window.SurveyWebApp;
     swa.init(config);
 </script>
@@ -69,3 +74,11 @@ to the page `js/swa.app.js` and `js/swa.data.js`
 
 ## Configuration
 
+Here are the possible configurations for the app when you initialize the survey.
+
+- **title** str *default : "survey_web_app"* - The title of the survey used
+in storing the data in localStorage
+- **url** str|bool *default : false* - The full URL for submitting the results.
+If false, results are saved in localStorage and logged to the console for debug.
+- **submitParams** obj *default : {}* - Additional parameters to be submitted
+with the ajax request upon survey completion / submission.
