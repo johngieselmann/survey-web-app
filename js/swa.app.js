@@ -40,18 +40,6 @@
         },
 
         /**
-         * The survey text elements.
-         * @var obj text.$begin
-         * @var obj text.$submit
-         * @var obj text.$end
-         */
-        text : {
-            $begin  : null,
-            $submit : null,
-            $end    : null
-        },
-
-        /**
          * The questions and answers data. The data gets assigned to the app
          * in qa.data.js
          * @var arr data
@@ -162,12 +150,6 @@
             for (var b in app.btn) {
                 var btnName = b.replace(/^\$/, "");
                 app.btn[b] = $(".js-btn-" + btnName);
-            }
-
-            // get all the text displays
-            for (var t in app.text) {
-                var textName = t.replace(/^\$/, "");
-                app.text[t] = $(".js-text-" + textName);
             }
         },
 

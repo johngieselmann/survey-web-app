@@ -18,7 +18,16 @@ Clone this repository to your site / server.
 git clone https://git@github.com/johngieselmann/survey-web-app
 ```
 
-Change the button text and 
+Change the button text and section headings in the `index.html` file if you so
+desire. Below are your options:
+
+- Buttons
+    - Begin `button.js-btn-begin`
+    - Submit `button.js-btn-submit`
+- Headings
+    - Begin `section.js-begin h1`
+    - Submit `section.js-submit h1`
+    - End `section.js-end h1`
 
 Add your questions and answers to the `js/swa.data.js` file following the
 guidlines outlined below and in the file.
