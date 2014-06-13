@@ -232,7 +232,6 @@
         prepareBtnText : function() {
             for (var i in app.settings.btnText) {
                 var name = "$" + i;
-                console.log(name);
                 app.btn[name].text(app.settings.btnText[i]);
             }
         },
@@ -526,12 +525,13 @@
          * @return void
          */
         nextSection : function() {
+            // if the button is inactive, we should not go on. also,
             // check if this is a question and that it has been answered
-            //jam
-            if (   app.section.$current.is(".js-question")
-                && app.section.$current.find(".js-chosen").length < 1
+            if (   $(this).is(".inactive")
+                || (   app.section.$current.is(".js-question")
+                    && app.section.$current.find(".js-chosen").length < 1
+                )
             ) {
-                console.log("nope");
                 return false;
             }
 
@@ -551,10 +551,14 @@
          * @return void
          */
         previousSection : function() {
-
-            // if we are at the beginning of the survey, do not go back
+            var $btn = $(this);
             var $previous = app.section.$current.prev("section");
-            if ($previous.is(".js-begin")) {
+
+            // if the button is inactive, we should not go back nor should
+            // we go back if the previous is the beginning
+            if (   $btn.is(".inactive")
+                || $previous.is(".js-begin")
+            ) {
                 return false;
             } else {
                 app.unloadSection(app.section.$current, "right");
@@ -712,7 +716,10 @@
 
             // load the end section and remove all others
             app.nextSection();
-            app.btn.$prev.remove();
+//            app.btn.$prev.remove();
+//            app.btn.$next.remove();
+            app.toggleEl(app.btn.$prev, "inactive");
+            app.toggleEl(app.btn.$next, "inactive");
             setTimeout(function() {
                 $("section").not(app.section.$end).remove();
             }, 1000);
