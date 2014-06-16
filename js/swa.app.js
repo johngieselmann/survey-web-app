@@ -168,8 +168,10 @@
             app.btn.$next.on("click", app.nextSection);
             app.btn.$submit.on("click", app.submit);
 
+            // scale the inputs as the window scales
             $win.on("resize", app.scaleAnswers);
 
+            // validate inputs with each key and allow return to navigate
             $(".js-input").on("keyup", app.validateInput);
         },
 
@@ -627,10 +629,11 @@
          *
          * @author JohnG <john.gieselmann@gmail.com>
          *
+         * @param obj e The event object.
+         *
          * @return bool valid Whether or not the input is valid.
          */
-        validateInput : function() {
-
+        validateInput : function(e) {
 
             // let's assume its invalid... safety first (as I never say)
             var valid = false;
@@ -656,6 +659,12 @@
             } else {
                 app.toggleEl(app.btn.$next, "active");
                 $input.addClass("js-chosen");
+            }
+
+            // if the button pressed was enter / return try and go to the
+            // next section
+            if (e.keyCode === 13) {
+                app.nextSection();
             }
 
             return valid;
