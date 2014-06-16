@@ -60,10 +60,10 @@
                     "value"   : "51-70",
                     "display" : "51-70"
                 },
-                {
-                    "value"   : "71+",
-                    "display" : "71+"
-                },
+//                {
+//                    "value"   : "71+",
+//                    "display" : "71+"
+//                },
                 {
                     "value"   : "na",
                     "display" : "Pass"
