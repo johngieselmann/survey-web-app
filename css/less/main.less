@@ -79,7 +79,7 @@ section {
     position: absolute;
     top: 0;
     left: -100%;
-    bottom: 5em;
+    bottom: 0;
     width: 100%;
     padding: 2em 0 0 0;
 
@@ -90,7 +90,7 @@ section {
     .transition(right, @sectionTransDur);
 
     h1 {
-        padding: .5em 1em;
+        padding: 0 1em;
 
         text-align: center;
         font-size: 1.8em;
@@ -285,6 +285,9 @@ footer {
  */
 @media only screen and (min-width: 768px) {
 
+    html {
+        font-size: 12px;
+    }
 }
 
 /**
@@ -298,7 +301,9 @@ footer {
  * iPad landscape width
  */
 @media only screen and (min-width: 1024px) {
-
+    html {
+        font-size: 14px;
+    }
 }
 
 /**
