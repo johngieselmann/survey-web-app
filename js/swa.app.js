@@ -277,31 +277,53 @@
                 ? aData.display
                 : aData.value;
 
-            // create the answer button
-            var $text = $("<p></p>")
-                .text(display);
+            // get the type of question and default to multiple choice
+            var type = qData.type !== "undefined"
+                ? qData.type
+                : "multi";
 
-            var $el = $("<div></div>")
-                .addClass("js-answer answer")
+            switch (type) {
+                case "text":
+                case "email":
+                //jam
+                    var $answer = $("<input />")
+                        .attr("type", "text");
+                    break;
+
+                // multiple-choice questions are default
+                case "multi":
+                default:
+                    // create the answer button
+                    var $text = $("<p></p>")
+                        .text(display);
+
+                    var $answer = $("<div></div>")
+                        .addClass("multi")
+                        .append($text);
+
+                    // bind the events to the button
+                    $answer.on("click", app.saveAnswer);
+                    $answer.on("click", app.nextSection);
+
+                    break;
+            }
+
+            $answer.addClass("js-answer answer")
                 .attr("data-qid", qData.id)
                 .attr("data-value", aData.value)
-                .append($text);
+
 
             // add in custom attributes
             if (typeof aData.attr === "object") {
-                app.addAttributes($el, aData.attr);
+                app.addAttributes($answer, aData.attr);
             }
-
-            // bind the events to the button
-            $el.on("click", app.saveAnswer);
-            $el.on("click", app.nextSection);
 
             // allow hover states for non-touch devices
             if (!Modernizr.touch) {
-                $el.on("mouseover mouseout", app.toggleNotChosen);
+                $answer.on("mouseover mouseout", app.toggleNotChosen);
             }
 
-            return $el;
+            return $answer;
         },
 
         /**

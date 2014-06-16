@@ -9,6 +9,8 @@
      *     {
      *         id      : <str> // used for question identification on submission
      *         display : <str> // actual text displayed for the question
+     *         type    : <str> // the type of question (email, text, multi)
+     *                         // where multi is the default if undefined
      *
      *         // OPTIONAL: attributes to be added to the question's HTML
      *         // section tag. DO NOT USE "sid" as a custom attribute...
@@ -90,6 +92,20 @@
                     "attr"    : {
                         "class" : "jam central station"
                     }
+                }
+            ]
+        },
+
+        // question 3
+        {
+            "id"      : "email",
+            "display" : "What is your email?",
+            "type"    : "email",
+            "attr"    : {},
+            "answers" : [
+                {
+                    "value"   : "email",
+                    "display" : "Email"
                 }
             ]
         }
