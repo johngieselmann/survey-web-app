@@ -293,6 +293,14 @@ footer .btn-next {
   }
 }
 /**
+ * Large screens
+ */
+@media only screen and (min-width: 1400px) {
+  html {
+    font-size: 16px;
+  }
+}
+/**
  * Adjustments for high-res devices
  */
 @media print, (-o-min-device-pixel-ratio: 5/4), (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi) {
