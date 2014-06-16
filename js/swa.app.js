@@ -170,7 +170,6 @@
 
             $win.on("resize", app.scaleAnswers);
 
-            //jam
             $(".js-input").on("keyup", app.validateInput);
         },
 
@@ -296,7 +295,6 @@
             switch (type) {
                 case "text":
                 case "email":
-                //jam
                     var $answer = $("<input />")
                         .addClass("text js-input")
                         .attr("type", "text");
@@ -638,7 +636,6 @@
             var valid = false;
             var $input = $(this);
 
-            //jam
             var type = $input.attr("data-validate");
             switch (type) {
                 case "email":
@@ -648,7 +645,7 @@
                     }
                     break;
                 default:
-                    console.log("wtf should I validate??");
+                    // nothing for now
                     break;
             }
 

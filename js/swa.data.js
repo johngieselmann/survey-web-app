@@ -41,9 +41,7 @@
         {
             "id"      : "age_range",
             "display" : "What is your age range?",
-            "attr"    : {
-                "class" : "jam central station"
-            },
+            "attr"    : {},
 
             "answers" : [
                 {
@@ -77,9 +75,7 @@
         {
             "id"      : "gender",
             "display" : "What is your gender?",
-            "attr"    : {
-                "class" : "jam central station"
-            },
+            "attr"    : {},
 
             "answers" : [
                 {
@@ -104,8 +100,7 @@
             "attr"    : {},
             "answers" : [
                 {
-                    "value"   : "email",
-                    "display" : "Email"
+                    "value"   : "email"
                 }
             ]
         }
