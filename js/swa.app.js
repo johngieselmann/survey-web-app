@@ -123,13 +123,14 @@
 
             // prepare app interaction
             app.captureElements();
-            app.bindEvents();
 
             // set the current section to the beginning
             app.section.$current = app.section.$begin;
 
             // place the questions and answers
             app.prepareData();
+
+            app.bindEvents();
         },
 
         /**
@@ -161,12 +162,16 @@
          * @return void
          */
         bindEvents : function() {
+            // progress buttons
             app.btn.$begin.on("click", app.begin);
             app.btn.$prev.on("click", app.previousSection);
             app.btn.$next.on("click", app.nextSection);
             app.btn.$submit.on("click", app.submit);
 
             $win.on("resize", app.scaleAnswers);
+
+            //jam
+            $(".js-input").on("keyup", app.validateInput);
         },
 
         /**
@@ -216,6 +221,12 @@
             // set the height of each answer equal to its width
             $(".js-answer").each(function() {
                 var $answer = $(this);
+
+                // ignore inputs
+                if ($answer.is("input")) {
+                    return;
+                }
+
                 $answer.height($answer.width());
             });
         },
@@ -287,6 +298,7 @@
                 case "email":
                 //jam
                     var $answer = $("<input />")
+                        .addClass("text js-input")
                         .attr("type", "text");
                     break;
 
@@ -309,6 +321,7 @@
             }
 
             $answer.addClass("js-answer answer")
+                .attr("data-validate", type)
                 .attr("data-qid", qData.id)
                 .attr("data-value", aData.value)
 
@@ -609,6 +622,46 @@
                 }
 
             }
+        },
+
+        /**
+         * Validate an input to allow / disallow progress.
+         *
+         * @author JohnG <john.gieselmann@gmail.com>
+         *
+         * @return bool valid Whether or not the input is valid.
+         */
+        validateInput : function() {
+
+
+            // let's assume its invalid... safety first (as I never say)
+            var valid = false;
+            var $input = $(this);
+
+            //jam
+            var type = $input.attr("data-validate");
+            switch (type) {
+                case "email":
+                    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                    if (re.test($input.val())) {
+                        valid = true;
+                    }
+                    break;
+                default:
+                    console.log("wtf should I validate??");
+                    break;
+            }
+
+            // toggle the next button
+            if (valid === false) {
+                app.toggleEl(app.btn.$next, "inactive");
+                $input.removeClass("js-chosen");
+            } else {
+                app.toggleEl(app.btn.$next, "active");
+                $input.addClass("js-chosen");
+            }
+
+            return valid;
         },
 
         /**

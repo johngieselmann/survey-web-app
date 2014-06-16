@@ -156,6 +156,19 @@ section.right-off {
   text-align: center;
   cursor: pointer;
 }
+.answer.text {
+  display: block;
+  width: 70%;
+  margin: 15% auto;
+  padding: .2em;
+  font-size: 1.6em;
+  border: 1px solid #cabdc6;
+  outline: none;
+  background: #ffffff;
+}
+.answer.text:focus {
+  border-color: #0eb1eb;
+}
 .num-answers-1 .answers {
   width: 80%;
   margin: 3% auto;
