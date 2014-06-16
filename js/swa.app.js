@@ -240,7 +240,7 @@
                 .text(qData.display);
 
             var $answers = $("<div></div>")
-                .addClass("answers js-answers");
+                .addClass("answers js-answers clearfix");
 
             // create the containing section
             var $el = $("<section></section>")

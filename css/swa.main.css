@@ -158,21 +158,27 @@ section.right-off {
 }
 .num-answers-1 .answers {
   width: 80%;
+  margin: 3% auto;
 }
 .num-answers-1 .answer {
-  width: 20%;
-  margin: 0 auto;
+  width: 40%;
+  margin: 0 30%;
 }
 .num-answers-2 .answers {
   width: 70%;
+  margin: 7% auto;
 }
 .num-answers-2 .answer {
   width: 40%;
-  margin: 5%;
+  margin: 0 5%;
+}
+.num-answers-3 .answers {
+  width: 80%;
+  margin: 10% auto;
 }
 .num-answers-3 .answer {
-  width: 26%;
-  margin: 3%;
+  width: 27%;
+  margin: 0 3%;
 }
 .num-answers-4 .answers {
   width: 60%;
