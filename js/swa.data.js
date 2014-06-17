@@ -104,7 +104,7 @@
             "answers"  : [
                 {
                     "value"   : "email",
-                    "display" : "Please enter a valid email."
+                    "display" : "you@example.com"
                 }
             ]
         },
@@ -119,7 +119,7 @@
             "answers"  : [
                 {
                     "value"   : "phone",
-                    "display" : "Please enter a valid phone number."
+                    "display" : "555-555-5555"
                 }
             ]
         }

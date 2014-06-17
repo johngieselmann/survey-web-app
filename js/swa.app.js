@@ -309,6 +309,7 @@
                 case "tel":
                     var $answer = $("<input />")
                         .addClass("text js-input")
+                        .attr("placeholder", aData.display)
                         .attr("type", type);
                     break;
 
@@ -740,8 +741,6 @@
                     postData[i] = app.settings.submitParams[i];
                 }
             }
-
-            console.log(postData);
 
             // if online and url was provided, post to the url
             if (navigator.onLine && app.settings.url !== false) {
