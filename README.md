@@ -1,10 +1,7 @@
 # Survey Web App
 
 A survey web app / page that can be added to any site for easy capturing of
-user input. Currently, it only supports multiple-choice answers. Deal with it.
-Just consider it anonymous... you'll get more honest answers that way.
-
-On submit, the questions and selected answers are posted as JSON to the URL
+user input. On submit, the questions and selected answers are posted as JSON to the URL
 set during initialization.
 
 ## Requirements
