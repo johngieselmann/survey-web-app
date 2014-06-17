@@ -612,6 +612,9 @@
                         });
 
                         if ($chosen) {
+                            $chosen.removeClass("not-chosen")
+                                .removeClass("js-not-chosen");
+
                             $answers.not($chosen)
                                 .addClass("not-chosen js-not-chosen");
                         } else {
