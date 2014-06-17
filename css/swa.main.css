@@ -99,6 +99,10 @@ section h1 {
   font-size: 1.8em;
   color: #1b2026;
 }
+section.required h1:after {
+  content: " *";
+  color: #fe403b;
+}
 section.left-on,
 section.right-on {
   left: 0;
@@ -127,8 +131,6 @@ section.right-off {
   transition: left 300ms ease-in;
   -webkit-backface-visibility: hidden;
 }
-/* Questions
-   ========================================================================== */
 /* Answers
    ========================================================================== */
 .answers {

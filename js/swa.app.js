@@ -264,9 +264,10 @@
             var req = typeof qData.required !== "undefined"
                 ? Boolean(qData.required)
                 : true;
-            $el.attr("data-required", req === true
-                ? 1
-                : 0);
+
+            if (req === true) {
+                $el.addClass("js-required required");
+            }
 
             // add in custom attributes
             if (typeof qData.attr === "object") {
@@ -457,7 +458,7 @@
             // unanswered, required slide
             if (   $section.is(app.section.$submit)
                 || (   $section.find(".js-chosen").length < 1
-                    && parseInt($section.attr("data-required"))
+                    && $section.is(".js-required")
                    )
             ) {
                 app.toggleEl(app.btn.$next, "inactive");
@@ -509,7 +510,7 @@
             // check if this is a required question that is unanswered
             if (   $(this).is(".inactive")
                 || (   app.section.$current.is(".js-question")
-                    && parseInt(app.section.$current.attr("data-required"))
+                    && app.section.$current.is(".js-required")
                     && app.section.$current.find(".js-chosen").length < 1
                    )
             ) {
@@ -682,7 +683,8 @@
             }
 
             // also, if this question is not required, allow empty inputs
-            if (   !parseInt(app.section.$current)
+            var $section = $("section[data-qid='" + $input.attr("data-qid") + "']");
+            if (   !$section.is(".js-required")
                 && $.trim(val) === ""
             ) {
                 $input.val("");

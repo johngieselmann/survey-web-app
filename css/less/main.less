@@ -112,6 +112,13 @@ section {
 
 }
 
+section.required {
+    h1:after {
+        content: " *";
+        color: @red;
+    }
+}
+
 section.left-on,
 section.right-on {
     left: 0;
@@ -128,8 +135,6 @@ section.right-off {
     .transition(left, @sectionTransDur);
 }
 
-/* Questions
-   ========================================================================== */
 /* Answers
    ========================================================================== */
 .answers {
