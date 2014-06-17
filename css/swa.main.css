@@ -47,6 +47,17 @@ button {
   background: #0eb1eb;
 }
 /* ==========================================================================
+   Main
+   ========================================================================== */
+main {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  overflow: hidden;
+}
+/* ==========================================================================
    Header
    ========================================================================== */
 header {
@@ -190,14 +201,14 @@ section.right-off {
   margin: 10% auto;
 }
 .num-answers-3 .answer.multi {
-  width: 27%;
+  width: 27.333333333%;
   margin: 0 3%;
 }
 .num-answers-4 .answers {
   width: 60%;
 }
 .num-answers-4 .answer.multi {
-  width: 35%;
+  width: 36%;
   margin: 3% 7%;
 }
 .num-answers-5 .answers,
@@ -206,7 +217,7 @@ section.right-off {
 }
 .num-answers-5 .answer.multi,
 .num-answers-6 .answer.multi {
-  width: 26%;
+  width: 27.3333333333%;
   margin: 3%;
 }
 .answer.not-chosen {
