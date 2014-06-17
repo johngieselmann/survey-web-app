@@ -35,15 +35,17 @@ guidlines outlined below and in the file.
 var appData = [
     // question 1
     {
-        id      : <str> // used for question identification on submission
-        display : <str> // actual text displayed for the question
-        type    : <str> // the type of question (email, text, tel, multi)
-                        // where multi is the default if undefined
+        id       : <str>  // used for question identification on submission
+        display  : <str>  // actual text displayed for the question
+        type     : <str>  // the type of question [email, text, tel, multi]
+                          // (default is multi)
+        required : <bool> // if required, can not move forward without
+                          // a valid answer (default is true)
 
         // OPTIONAL: attributes to be added to the question's HTML
         // section tag. DO NOT USE "sid" as a custom attribute...
         // things will break and you will not be happy
-        attr    : {
+        attr     : {
             id       : <str> // overrides the ID attribute
             rel      : <str> // overrides the rel attribute
             class    : <str> // appended to current classes
@@ -51,7 +53,7 @@ var appData = [
         }
 
         // the array of answer objects to go with the question
-        answers : [
+        answers  : [
             // answer 1
             {
                 value   : <str> // the answer value submitted for the question

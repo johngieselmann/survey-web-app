@@ -260,6 +260,14 @@
                 .attr("data-qid", qData.id)
                 .attr("data-sid", qData.id);
 
+            // set required / not required, required being the default
+            var req = typeof qData.required !== "undefined"
+                ? Boolean(qData.required)
+                : true;
+            $el.attr("data-required", req === true
+                ? 1
+                : 0);
+
             // add in custom attributes
             if (typeof qData.attr === "object") {
                 app.addAttributes($el, qData.attr);
@@ -446,9 +454,11 @@
             }
 
             // do not allow the next button if we are at the submit or an
-            // unchosen answer slide
+            // unanswered, required slide
             if (   $section.is(app.section.$submit)
-                || $section.find(".js-chosen").length < 1
+                || (   $section.find(".js-chosen").length < 1
+                    && parseInt($section.attr("data-required"))
+                   )
             ) {
                 app.toggleEl(app.btn.$next, "inactive");
             } else {
@@ -494,12 +504,14 @@
          * @return void
          */
         nextSection : function() {
+
             // if the button is inactive, we should not go on. also,
-            // check if this is a question and that it has been answered
+            // check if this is a required question that is unanswered
             if (   $(this).is(".inactive")
                 || (   app.section.$current.is(".js-question")
+                    && parseInt(app.section.$current.attr("data-required"))
                     && app.section.$current.find(".js-chosen").length < 1
-                )
+                   )
             ) {
                 return false;
             }
@@ -651,6 +663,17 @@
                         valid = true;
                     }
                     break;
+
+                case "tel":
+
+                    // get just the digits and make sure it is a real number
+                    var digits = $input.val().replace(/[^0-9]/g, "");
+                    var re = /^\d{10}$/;
+                    if (digits && re.test(digits)) {
+                        valid = true;
+                    }
+                    break;
+
                 default:
                     // nothing for now
                     break;
