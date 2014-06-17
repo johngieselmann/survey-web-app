@@ -91,9 +91,10 @@ Submissions are posted to the URL passed into the app configuration. The data
 is formatted as JSON and contains the following:
 ```
 {
+    // the actual results from the survey
     results      : {
-        question_id : answer_value // the question ID from the data and its
-                                   // corresponding answer value from the data
+        question_id : answer_value // the question IDs from the data and their
+                                   // corresponding answer values from the data
     }
     timestamp    : 1234            // the UTC timestamp at time of submission
     navigator    : {}              // the browsers navigator object
