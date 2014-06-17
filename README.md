@@ -85,6 +85,21 @@ to the page `js/swa.app.js` and `js/swa.data.js`
 </script>
 ```
 
+## Submissions
+
+Submissions are posted to the URL passed into the app configuration. The data
+is formatted as JSON and contains the following:
+```
+{
+    results   : {
+        question_id : answer_value // the question ID from the data and its
+                                   // corresponding answer value from the data
+    }
+    timestamp : 1234               // the UTC timestamp at time of submission
+    navigator : {}                 // the browsers navigator object
+}
+```
+
 ## Configuration
 
 Here are the possible configurations for the app when you initialize the survey.

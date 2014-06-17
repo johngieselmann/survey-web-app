@@ -727,8 +727,9 @@
 
             // create an object for posting the results
             var postData = {
-                results   : app.results,
-                timestamp : Date.now()
+                "results"   : app.results,
+                "timestamp" : Date.now(),
+                "navigator" : navigator
             };
 
             // assign any custom submit parameters to the post data
