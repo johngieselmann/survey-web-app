@@ -178,6 +178,7 @@ section.right-off {
   border: 1px solid #cabdc6;
   outline: none;
   background: #ffffff;
+  text-align: center;
 }
 .answer.text:focus {
   border-color: #0eb1eb;
