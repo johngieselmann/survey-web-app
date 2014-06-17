@@ -654,12 +654,14 @@
             // let's assume its invalid... safety first (as I never say)
             var valid = false;
             var $input = $(this);
+            var val = $input.val();
 
             var type = $input.attr("data-validate");
             switch (type) {
+
                 case "email":
                     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                    if (re.test($input.val())) {
+                    if (re.test(val)) {
                         valid = true;
                     }
                     break;
@@ -667,7 +669,7 @@
                 case "tel":
 
                     // get just the digits and make sure it is a real number
-                    var digits = $input.val().replace(/[^0-9]/g, "");
+                    var digits = val.replace(/[^0-9]/g, "");
                     var re = /^\d{10}$/;
                     if (digits && re.test(digits)) {
                         valid = true;
@@ -677,6 +679,14 @@
                 default:
                     // nothing for now
                     break;
+            }
+
+            // also, if this question is not required, allow empty inputs
+            if (   !parseInt(app.section.$current)
+                && $.trim(val) === ""
+            ) {
+                $input.val("");
+                valid = true;
             }
 
             // toggle the next button
