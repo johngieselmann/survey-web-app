@@ -299,7 +299,7 @@
                 case "email":
                     var $answer = $("<input />")
                         .addClass("text js-input")
-                        .attr("type", "text");
+                        .attr("type", type);
                     break;
 
                 // multiple-choice questions are default
@@ -667,6 +667,8 @@
             // if the button pressed was enter / return try and go to the
             // next section
             if (e.keyCode === 13) {
+                // blur the input to hide keyboard on mobile
+                $input.blur();
                 app.nextSection();
             }
 
