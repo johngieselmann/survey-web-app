@@ -297,6 +297,7 @@
             switch (type) {
                 case "text":
                 case "email":
+                case "tel":
                     var $answer = $("<input />")
                         .addClass("text js-input")
                         .attr("type", type);

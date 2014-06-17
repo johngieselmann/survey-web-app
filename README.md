@@ -37,7 +37,7 @@ var appData = [
     {
         id      : <str> // used for question identification on submission
         display : <str> // actual text displayed for the question
-        type    : <str> // the type of question (email, text, multi)
+        type    : <str> // the type of question (email, text, tel, multi)
                         // where multi is the default if undefined
 
         // OPTIONAL: attributes to be added to the question's HTML
