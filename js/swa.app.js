@@ -731,7 +731,7 @@
             var postData = {
                 "results"   : app.results,
                 "timestamp" : Date.now(),
-                "navigator" : navigator
+                "useragent" : navigator.userAgent
             };
 
             // assign any custom submit parameters to the post data
@@ -740,6 +740,8 @@
                     postData[i] = app.settings.submitParams[i];
                 }
             }
+
+            console.log(postData);
 
             // if online and url was provided, post to the url
             if (navigator.onLine && app.settings.url !== false) {

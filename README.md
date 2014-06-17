@@ -94,7 +94,7 @@ is formatted as JSON and contains the following:
                                    // corresponding answer values from the data
     }
     timestamp    : 1234            // the UTC timestamp at time of submission
-    navigator    : {}              // the browsers navigator object
+    useragent    : "Mozilla..."    // the navigator userAgent property
     submitParam1 : xxxx            // all submitParams are added to the object
     submitParam2 : yyyy            // see above
 }
