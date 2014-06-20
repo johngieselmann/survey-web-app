@@ -173,6 +173,7 @@
 
             // validate inputs with each key and allow return to navigate
             $(".js-input").on("keyup", app.validateInput);
+            $(".js-input[type='tel']").on("keydown", app.cleanseTel);
         },
 
         /**
@@ -331,11 +332,15 @@
                     break;
             }
 
+            // telephone numbers get a maximum number of characters
+            if (type === "tel") {
+                $answer.attr("maxlength", "12");
+            }
+
             $answer.addClass("js-answer answer")
                 .attr("data-validate", type)
                 .attr("data-qid", qData.id)
                 .attr("data-value", aData.value)
-
 
             // add in custom attributes
             if (typeof aData.attr === "object") {
@@ -643,6 +648,29 @@
         },
 
         /**
+         * Cleanse a telephone input as it is being typed.
+         *
+         * @author JohnG <john.gieselmann@gmail.com>
+         *
+         * @return void
+         */
+        cleanseTel : function(e) {
+            var allowedKeys = [
+                8,                                           // backspace
+                13,                                          // return
+                48, 49, 50, 51, 52, 53, 54, 55, 56, 57,      // top row
+                96, 97, 98, 99, 100, 101, 102, 103, 104, 105 // numpad
+            ];
+
+            // only allow numbers and certain commands to be input
+            if (   $.inArray(e.keyCode, allowedKeys) === -1
+                && (e.metaKey === false && e.ctrlKey === false)
+            ) {
+                e.preventDefault();
+            }
+        },
+
+        /**
          * Validate an input to allow / disallow progress.
          *
          * @author JohnG <john.gieselmann@gmail.com>
@@ -669,6 +697,15 @@
                     break;
 
                 case "tel":
+
+                    // automatically insert dashes
+                    if (   (val.length === 3 || val.length === 7)
+                        && e.keyCode !== 8
+                    ) {
+                        $input.val(val + "-");
+                    }
+
+                    // TODO: fix speedy typers missing the dashes
 
                     // get just the digits and make sure it is a real number
                     var digits = val.replace(/[^0-9]/g, "");
