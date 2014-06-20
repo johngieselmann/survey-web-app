@@ -320,6 +320,9 @@ footer .btn-next {
   html {
     font-size: 14px;
   }
+  .answer.multi {
+    font-size: 1.6em;
+  }
 }
 /**
  * Large screens
@@ -327,6 +330,11 @@ footer .btn-next {
 @media only screen and (min-width: 1400px) {
   html {
     font-size: 16px;
+  }
+}
+@media only screen and (min-width: 1600px) {
+  html {
+    font-size: 18px;
   }
 }
 /**
