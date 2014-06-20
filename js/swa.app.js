@@ -172,7 +172,9 @@
             $win.on("resize", app.scaleAnswers);
 
             // validate inputs with each key and allow return to navigate
-            $(".js-input").on("keyup", app.validateInput);
+            //jam
+            $(".js-input").on("keyup", app.validateInput)
+                .on("keydown", app.inputEvents);
             $(".js-input[type='tel']").on("keydown", app.cleanseTel);
         },
 
@@ -667,6 +669,29 @@
                 && (e.metaKey === false && e.ctrlKey === false)
             ) {
                 e.preventDefault();
+            }
+        },
+
+        /**
+         * Handle special cases for events happening within text inputs so
+         * we don't do anything unexpected.
+         *
+         * @author JohnG <john.gieselmann@gmail.com>
+         *
+         * @param obj e The event object.
+         *
+         * @return void
+         */
+        inputEvents : function(e) {
+            switch (e.type) {
+
+                case "keydown":
+                    // do not let users tab through inputs
+                    if (e.keyCode === 9) {
+                        e.preventDefault();
+                    }
+
+                    break;
             }
         },
 
