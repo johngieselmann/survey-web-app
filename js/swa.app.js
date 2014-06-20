@@ -310,9 +310,12 @@
                 case "text":
                 case "email":
                 case "tel":
+                    // inputs are disabled by default to avoid mobile safari
+                    // from allowing navigation between inputs
                     var $answer = $("<input />")
                         .addClass("text js-input")
                         .attr("placeholder", aData.display)
+                        .attr("disabled", "disabled")
                         .attr("type", type);
                     break;
 
@@ -474,6 +477,9 @@
                 app.toggleEl(app.btn.$next, "active");
             }
 
+            // enable any inputs
+            $section.find("input").removeAttr("disabled");
+
             // all loaded sections get moved in from the right
             app.trans.sectionMove($section, "right", true);
 
@@ -501,6 +507,9 @@
                 ? section
                 : $("[data-sid='" + section + "']");
             $section.removeClass("active");
+
+            // disable any inputs
+            $section.find("input").attr("disabled", "disabled");
 
             app.trans.sectionMove($section, dir, false);
         },
