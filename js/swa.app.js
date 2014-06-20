@@ -799,10 +799,17 @@
             } else {
                 // store locally
                 var storeName = app.settings.title.toLowerCase().replace(/\s/g, "_");
-                localStorage.setItem(
-                    app.settings.title,
-                    JSON.stringify(postData)
-                );
+
+                // mobile safari won't store in private browsing, so we want
+                // it to fail gracefully
+                try {
+                    localStorage.setItem(
+                        app.settings.title,
+                        JSON.stringify(postData)
+                    );
+                } catch(e) {
+                    console.log(e.message);
+                }
 
                 // console log for debugging
                 console.log("RESULTS: ", postData);
